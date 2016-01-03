@@ -13,7 +13,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "xo && ava"
+    "test": "xo && nyc --reporter lcov --reporter text --cache ava --verbose"
   },
   "files": [
     "index.js"
@@ -24,6 +24,7 @@
   "dependencies": {},
   "devDependencies": {
     "ava": "^0.8.0",
+    "nyc": "^5.2.0",
     "xo": "^0.12.1"
   }
 }
