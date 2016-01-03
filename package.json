@@ -1,0 +1,29 @@
+{
+  "name": "stack-utils",
+  "version": "0.0.0",
+  "description": "My mathematical module",
+  "license": "MIT",
+  "repository": "jamestalmage/stack-utils",
+  "author": {
+    "name": "James Talmage",
+    "email": "james@talmage.io",
+    "url": "github.com/jamestalmage"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    ""
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.8.0",
+    "xo": "^0.12.1"
+  }
+}
