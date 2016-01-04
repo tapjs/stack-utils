@@ -8,6 +8,10 @@ const LinuxStack1 = join(linuxStack1(), internalStack());
 const WindowsStack1 = join(windowsStack1(), internalStack());
 const fixtureDir = path.join(__dirname, 'fixtures');
 
+const version = process.version.slice(1).split('.').map(function (val) {
+	return parseInt(val, 10);
+});
+
 test('must be called with new', t => {
 	t.is(typeof StackUtils, 'function');
 	const stackUtils = StackUtils;
@@ -212,14 +216,20 @@ test('at: eval', t => {
 	const capture = new CaptureFixture(stackUtil);
 
 	const at = capture.eval('call', 'at', capture.call);
-
-	t.same(at, {
+	const expected = {
 		line: 1,
 		column: 14,
 		evalOrigin: 'eval at <anonymous> (' + path.join(fixtureDir, 'capture-fixture.js') + ':57:9)',
 		function: 'eval'
-	});
-	t.pass();
+	};
+
+	// TODO: There are some inconsistencies between this and how `parseLine` works.
+	if (version[0] < 4) {
+		expected.type = 'CaptureFixture';
+		expected.function = 'eval';
+	}
+
+	t.same(at, expected);
 });
 
 test('parseLine', t => {
@@ -251,9 +261,10 @@ test('parseLine', t => {
 		function: 'Foo'
 	});
 
+	// EVAL
 	const evalStack = capture.eval('error', 'foo').stack.split('\n');
 
-	t.same(stack.parseLine(evalStack[2]), {
+	const expected = {
 		file: '<anonymous>',
 		line: 1,
 		column: 14,
@@ -262,7 +273,15 @@ test('parseLine', t => {
 		evalColumn: 9,
 		evalFile: path.join(fixtureDir, 'capture-fixture.js'),
 		function: 'eval'
-	});
+	};
+
+	if (version[0] < 4) {
+		expected.function = 'CaptureFixture.eval';
+	}
+
+	const actual = stack.parseLine(evalStack[2]);
+
+	t.same(actual, expected);
 });
 
 function join() {
