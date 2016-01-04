@@ -120,14 +120,17 @@ StackUtils.prototype.at = function at(fn) {
 	}
 
 	var res = {
-		file: site.getFileName(),
 		line: site.getLineNumber(),
 		column: site.getColumnNumber()
 	};
 
-	if (res.file.indexOf(this._cwd + '/') === 0 ||
-		res.file.indexOf(this._cwd + '\\') === 0) {
-		res.file = res.file.substr(this._cwd.length + 1);
+	var file = site.getFileName();
+	if (file) {
+		if (file.indexOf(this._cwd + '/') === 0 ||
+			file.indexOf(this._cwd + '\\') === 0) {
+			file = file.substr(this._cwd.length + 1);
+		}
+		res.file = file;
 	}
 
 	if (site.isConstructor()) {

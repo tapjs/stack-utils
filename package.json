@@ -21,6 +21,13 @@
   "keywords": [
     ""
   ],
+  "config": {
+    "nyc": {
+      "exclude": [
+        "fixtures/*"
+      ]
+    }
+  },
   "dependencies": {},
   "devDependencies": {
     "ava": "^0.8.0",
