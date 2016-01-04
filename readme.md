@@ -1,7 +1,8 @@
-# stack-utils [![Build Status](https://travis-ci.org/jamestalmage/stack-utils.svg?branch=master)](https://travis-ci.org/jamestalmage/stack-utils)
+# stack-utils [![Build Status](https://travis-ci.org/jamestalmage/stack-utils.svg?branch=master)](https://travis-ci.org/jamestalmage/stack-utils) [![Coverage Status](https://coveralls.io/repos/jamestalmage/stack-utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/jamestalmage/stack-utils?branch=master)
 
-> My mathematical module
+> Captures and cleans stack traces.
 
+Extracted from `lib/stack.js` in the [`node-tap` project](https://github.com/tapjs/node-tap)
 
 ## Install
 
@@ -13,10 +14,11 @@ $ npm install --save stack-utils
 ## Usage
 
 ```js
-const stackUtils = require('stack-utils');
+const StackUtils = require('stack-utils');
+const stack = new StackUtils({cwd: process.cwd(), internals: StackUtils.nodeInternals()});
 
-stackUtils('unicorns');
-//=> 'unicorns & rainbows'
+console.log(stack.clean(new Error().stack));
+// outputs a beutified stack trace
 ```
 
 

@@ -1,7 +1,7 @@
 {
   "name": "stack-utils",
   "version": "0.0.0",
-  "description": "My mathematical module",
+  "description": "Captures and cleans stack traces",
   "license": "MIT",
   "repository": "jamestalmage/stack-utils",
   "author": {
@@ -31,6 +31,7 @@
   "dependencies": {},
   "devDependencies": {
     "ava": "^0.8.0",
+    "coveralls": "^2.11.6",
     "flatten": "0.0.1",
     "nyc": "^5.2.0",
     "xo": "^0.12.1"
