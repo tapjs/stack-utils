@@ -129,4 +129,4 @@ Parses a `string` (which should be a single line from a stack trace), and genera
 
 ## License
 
-MIT © [James Talmage](http://github.com/jamestalmage)
+MIT © [Isaac Z. Schlueter](http://github.com/isaacs) [James Talmage](http://github.com/jamestalmage)
