@@ -22,19 +22,16 @@
   "keywords": [
     ""
   ],
-  "config": {
-    "nyc": {
-      "exclude": [
-        "fixtures/*"
-      ]
-    }
-  },
   "dependencies": {},
   "devDependencies": {
     "ava": "^0.8.0",
+    "bluebird": "^3.1.1",
     "coveralls": "^2.11.6",
     "flatten": "0.0.1",
+    "nested-error-stacks": "^1.0.2",
     "nyc": "^5.2.0",
+    "pify": "^2.3.0",
+    "q": "^1.4.1",
     "xo": "^0.12.1"
   }
 }

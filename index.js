@@ -34,7 +34,12 @@ StackUtils.prototype.clean = function (stack) {
 		stack = stack.slice(1);
 	}
 
-	stack = stack.map(function (st) {
+	var outdent = false;
+	var lastNonAtLine = null;
+	var result = [];
+
+	stack.forEach(function (st1) {
+		var st = st1;
 		var isInternal = this._internals.some(function (internal) {
 			return internal.test(st);
 		});
@@ -43,13 +48,36 @@ StackUtils.prototype.clean = function (stack) {
 			return null;
 		}
 
-		return st.trim()
-			.replace(/^\s*at /, '')
+		var isAtLine = /^\s*at /.test(st);
+
+		if (outdent) {
+			st = st.replace(/\s+$/, '').replace(/^(\s+)at /, '$1');
+		} else {
+			st = st.trim();
+			if (isAtLine) {
+				st = st.substring(3);
+			}
+		}
+
+		st = st
 			.replace(/\\/g, '/')
 			.replace(this._cwd + '/', '');
-	}, this).filter(function (st) {
-		return st;
-	}).join('\n').trim();
+
+		if (st) {
+			if (isAtLine) {
+				if (lastNonAtLine) {
+					result.push(lastNonAtLine);
+					lastNonAtLine = null;
+				}
+				result.push(st);
+			} else {
+				outdent = true;
+				lastNonAtLine = st;
+			}
+		}
+	}, this);
+
+	stack = result.join('\n').trim();
 
 	if (stack) {
 		return stack + '\n';

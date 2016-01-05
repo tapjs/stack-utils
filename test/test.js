@@ -1,12 +1,11 @@
 import path from 'path';
 import test from 'ava';
-import flatten from 'flatten';
-import StackUtils from './';
+import StackUtils from '../';
 import CaptureFixture from './fixtures/capture-fixture';
+import {join, fixtureDir} from './_utils';
 
 const LinuxStack1 = join(linuxStack1(), internalStack());
 const WindowsStack1 = join(windowsStack1(), internalStack());
-const fixtureDir = path.join(__dirname, 'fixtures');
 
 const version = process.version.slice(1).split('.').map(function (val) {
 	return parseInt(val, 10);
@@ -293,11 +292,6 @@ test('parseLine: handles native errors', t => {
 		function: 'Error'
 	});
 });
-
-function join() {
-	var args = Array.prototype.slice.call(arguments);
-	return flatten(args).join('\n') + '\n';
-}
 
 function linuxStack1() {
 	return [
