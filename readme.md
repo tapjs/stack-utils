@@ -1,6 +1,9 @@
-# stack-utils [![Build Status](https://travis-ci.org/jamestalmage/stack-utils.svg?branch=master)](https://travis-ci.org/jamestalmage/stack-utils) [![Coverage Status](https://coveralls.io/repos/jamestalmage/stack-utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/jamestalmage/stack-utils?branch=master)
+# stack-utils 
 
 > Captures and cleans stack traces.
+
+[![Linux Build](https://travis-ci.org/jamestalmage/stack-utils.svg?branch=master)](https://travis-ci.org/jamestalmage/stack-utils) [![Windows Build](https://ci.appveyor.com/api/projects/status/6ceryao6d7o7kp86/branch/master?svg=true)](https://ci.appveyor.com/project/jamestalmage/stack-utils/branch/master) [![Coverage](https://coveralls.io/repos/jamestalmage/stack-utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/jamestalmage/stack-utils?branch=master)
+
 
 Extracted from `lib/stack.js` in the [`node-tap` project](https://github.com/tapjs/node-tap)
 
