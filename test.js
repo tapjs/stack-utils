@@ -80,7 +80,7 @@ test('captureString: with startStack function', t => {
 	const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stack);
 
-	const capturedString = capture.redirect1('redirect2', 'call', 'captureString', capture.call);
+	const capturedString = capture.redirect1('redirect2', 'call', 'captureString', {startStackFunction: capture.call});
 	t.is(capturedString, join([
 		'CaptureFixture.redirect2 (capture-fixture.js:17:22)',
 		'CaptureFixture.redirect1 (capture-fixture.js:11:22)'
@@ -91,7 +91,7 @@ test('captureString: with limit', t => {
 	const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stack);
 
-	const capturedString = capture.redirect1('redirect2', 'call', 'captureString', 1);
+	const capturedString = capture.redirect1('redirect2', 'call', 'captureString', {limit: 1});
 	t.is(capturedString, join([
 		'CaptureFixture.call (capture-fixture.js:23:28)'
 	]));
@@ -101,7 +101,7 @@ test('captureString: with limit and startStack', t => {
 	const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stack);
 
-	const capturedString = capture.redirect1('redirect2', 'call', 'captureString', 1, capture.call);
+	const capturedString = capture.redirect1('redirect2', 'call', 'captureString', {limit: 1, startStackFunction: capture.call});
 	t.is(capturedString, join([
 		'CaptureFixture.redirect2 (capture-fixture.js:17:22)'
 	]));
@@ -119,7 +119,7 @@ test('capture returns an array of call sites', t => {
 test('capture: with limit', t => {
 	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stackUtil);
-	const stack = capture.redirect1('redirect2', 'call', 'capture', 1);
+	const stack = capture.redirect1('redirect2', 'call', 'capture', {limit: 1});
 	t.is(stack.length, 1);
 	t.is(stack[0].getFunctionName(), 'CaptureFixture.call');
 });
@@ -127,7 +127,7 @@ test('capture: with limit', t => {
 test('capture: with stackStart function', t => {
 	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stackUtil);
-	const stack = capture.redirect1('redirect2', 'call', 'capture', capture.call);
+	const stack = capture.redirect1('redirect2', 'call', 'capture', {startStackFunction: capture.call});
 	t.true(stack.length > 1);
 	t.is(stack[0].getFunctionName(), 'CaptureFixture.redirect2');
 });
@@ -135,7 +135,7 @@ test('capture: with stackStart function', t => {
 test('capture: with limit and stackStart function', t => {
 	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stackUtil);
-	const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
+	const stack = capture.redirect1('redirect2', 'call', 'capture', {limit: 1, startStackFunction: capture.call});
 	t.is(stack.length, 1);
 	t.is(stack[0].getFunctionName(), 'CaptureFixture.redirect2');
 });
