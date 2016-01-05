@@ -238,11 +238,18 @@ test('parseLine', t => {
 
 	t.same(stack.parseLine('foo'), null, 'should not match');
 
-	t.same(stack.parseLine('    at foo (/user/dev/project/foo.js:3:8)'), {
+	t.same(stack.parseLine('    at bar (/user/dev/project/foo.js:3:8)'), {
 		file: 'foo.js',
 		line: 3,
 		column: 8,
-		function: 'foo'
+		function: 'bar'
+	});
+
+	t.same(stack.parseLine('    at SomeClass.someFunc (/user/dev/project/foo.js:3:8)'), {
+		file: 'foo.js',
+		line: 3,
+		column: 8,
+		function: 'SomeClass.someFunc'
 	});
 
 	t.same(stack.parseLine('    at foo (/some/other/dir/file.js:3:8)'), {
