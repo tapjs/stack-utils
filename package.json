@@ -13,7 +13,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "xo && nyc --reporter lcov --reporter text --cache ava --verbose"
+    "test": "xo && nyc --reporter lcov --reporter text --cache ava --verbose",
+    "test-win": "ava --verbose"
   },
   "files": [
     "index.js"
