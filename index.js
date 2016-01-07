@@ -57,10 +57,14 @@ StackUtils.prototype.clean = function (stack) {
 	return null;
 };
 
-StackUtils.prototype.captureString = function (options) {
-	options = options || {};
-	var limit = options.limit || Infinity;
-	var fn = options.startStackFunction || this.captureString;
+StackUtils.prototype.captureString = function (limit, fn) {
+	if (typeof limit === 'function') {
+		fn = limit;
+		limit = Infinity;
+	}
+	if (!fn) {
+		fn = this.captureString;
+	}
 
 	var limitBefore = Error.stackTraceLimit;
 	if (limit) {
@@ -76,11 +80,14 @@ StackUtils.prototype.captureString = function (options) {
 	return this.clean(stack);
 };
 
-StackUtils.prototype.capture = function (options) {
-	options = options || {};
-	var limit = options.limit || Infinity;
-	var fn = options.startStackFunction || this.capture;
-
+StackUtils.prototype.capture = function (limit, fn) {
+	if (typeof limit === 'function') {
+		fn = limit;
+		limit = Infinity;
+	}
+	if (!fn) {
+		fn = this.capture;
+	}
 	var prepBefore = Error.prepareStackTrace;
 	var limitBefore = Error.stackTraceLimit;
 
@@ -106,7 +113,7 @@ StackUtils.prototype.at = function at(fn) {
 		fn = at;
 	}
 
-	var site = this.capture({limit: 1, startStackFunction: fn})[0];
+	var site = this.capture(1, fn)[0];
 
 	if (!site) {
 		return {};
