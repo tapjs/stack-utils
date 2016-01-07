@@ -65,33 +65,27 @@ Returns a `string` with the cleaned up stack (always terminated with a `\n` newl
 Type: `string` or an `array` of `string`s
 
 
-### stackUtils.capture([options])
+### stackUtils.capture([limit], [startStackFunction])
 
 Captures the current stack trace, returning an array of `CallSite`s. There are good overviews of the available CallSite methods [here](https://github.com/v8/v8/wiki/Stack%20Trace%20API#customizing-stack-traces), and [here](https://github.com/sindresorhus/callsites#api).
 
-#### options
-
-##### limit
+#### limit
 
 Type: `number`
 Default: `Infinity`
 
 Limits the number of lines returned by dropping all lines in excess of the limit. This removes lines from the stack trace.
 
-##### startStackFunction
+#### startStackFunction
 
 Type: `function`
 
 The function where the stack trace should start. The first line of the stack trace will be the function that called `startStackFunction`. This removes lines from the end of the stack trace.
 
 
-### stackUtils.captureString([options])
+### stackUtils.captureString([limit], [startStackFunction])
 
-Captures the current stack trace, cleans it using `stackUtils.clean(stack)`, and returns a string with the cleaned stack trace.
- 
-#### options
-
-`captureString` has the same available options as `capture`
+Captures the current stack trace, cleans it using `stackUtils.clean(stack)`, and returns a string with the cleaned stack trace. It takes the same arguments as `stackUtils.capture`.
 
 
 ### stackUtils.at([startStackFunction])
