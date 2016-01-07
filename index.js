@@ -5,7 +5,7 @@ function StackUtils(opts) {
 		throw new Error('StackUtils constructor must be called with new');
 	}
 	opts = opts || {};
-	this._cwd = opts.cwd || process.cwd();
+	this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/');
 	this._internals = opts.internals || [];
 }
 
@@ -45,8 +45,8 @@ StackUtils.prototype.clean = function (stack) {
 
 		return st.trim()
 			.replace(/^\s*at /, '')
-			.replace(this._cwd + '/', '')
-			.replace(this._cwd + '\\', '');
+			.replace(/\\/g, '/')
+			.replace(this._cwd + '/', '');
 	}, this).filter(function (st) {
 		return st;
 	}).join('\n').trim();
@@ -126,8 +126,8 @@ StackUtils.prototype.at = function at(fn) {
 
 	var file = site.getFileName();
 	if (file) {
-		if (file.indexOf(this._cwd + '/') === 0 ||
-			file.indexOf(this._cwd + '\\') === 0) {
+		file = file.replace(/\\/g, '/');
+		if (file.indexOf(this._cwd + '/') === 0) {
 			file = file.substr(this._cwd.length + 1);
 		}
 		res.file = file;
@@ -210,15 +210,16 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 	var native = match[11] === 'native';
 
 	var res = {
-		file: file,
 		line: Number(lnum),
 		column: Number(col)
 	};
 
-	if (res.file &&
-		(res.file.indexOf(this._cwd + '/') === 0 ||
-		res.file.indexOf(this._cwd + '\\') === 0)) {
-		res.file = res.file.substr(this._cwd.length + 1);
+	if (file) {
+		file = file.replace(/\\/g, '/');
+		if ((file.indexOf(this._cwd + '/') === 0)) {
+			file = file.substr(this._cwd.length + 1);
+		}
+		res.file = file;
 	}
 
 	if (ctor) {
@@ -229,7 +230,7 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 		res.evalOrigin = evalOrigin;
 		res.evalLine = evalLine;
 		res.evalColumn = evalCol;
-		res.evalFile = evalFile;
+		res.evalFile = evalFile && evalFile.replace(/\\/g, '/');
 	}
 
 	if (native) {

@@ -43,20 +43,16 @@ test('clean: truncates cwd', t => {
 
 test('clean: eliminates internals', t => {
 	let stack = new StackUtils({cwd: '/user/dev', internals: StackUtils.nodeInternals()});
-	t.is(stack.clean(LinuxStack1), join([
+	var expected = join([
 		'foo (project/foo.js:3:8)',
 		'bar (project/foo.js:7:2)',
 		'bar (project/bar.js:4:2)',
 		'Object.<anonymous> (project/bar.js:7:1)'
-	]));
+	]);
+	t.is(stack.clean(LinuxStack1), expected);
 
 	stack = new StackUtils({cwd: 'Z:\\user\\dev', internals: StackUtils.nodeInternals()});
-	t.is(stack.clean(WindowsStack1), join([
-		'foo (project\\foo.js:3:8)',
-		'bar (project\\foo.js:7:2)',
-		'bar (project\\bar.js:4:2)',
-		'Object.<anonymous> (project\\bar.js:7:1)'
-	]));
+	t.is(stack.clean(WindowsStack1), expected);
 });
 
 test('clean: returns null if it is all internals', t => {
