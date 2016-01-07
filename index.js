@@ -209,10 +209,15 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 	var col = match[10];
 	var native = match[11] === 'native';
 
-	var res = {
-		line: Number(lnum),
-		column: Number(col)
-	};
+	var res = {};
+
+	if (lnum) {
+		res.line = Number(lnum);
+	}
+
+	if (col) {
+		res.column = Number(col);
+	}
 
 	if (file) {
 		file = file.replace(/\\/g, '/');

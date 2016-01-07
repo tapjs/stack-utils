@@ -158,7 +158,7 @@ test('at: with stackStart', t => {
 	const at = capture.redirect1('call', 'at', capture.call);
 
 	t.same(at, {
-		file: `fixtures${path.sep}capture-fixture.js`,
+		file: `fixtures/capture-fixture.js`,
 		line: 11,
 		column: 22,
 		type: 'CaptureFixture',
@@ -274,7 +274,7 @@ test('parseLine', t => {
 		evalOrigin: '<anonymous>',
 		evalLine: 57,
 		evalColumn: 9,
-		evalFile: path.join(fixtureDir, 'capture-fixture.js'),
+		evalFile: path.join(fixtureDir, 'capture-fixture.js').replace(/\\/g, '/'),
 		function: 'eval'
 	};
 
@@ -285,6 +285,13 @@ test('parseLine', t => {
 	const actual = stack.parseLine(evalStack[2]);
 
 	t.same(actual, expected);
+});
+
+test('parseLine: handles native errors', t => {
+	t.same(StackUtils.parseLine('    at Error (native)'), {
+		native: true,
+		function: 'Error'
+	});
 });
 
 function join() {
