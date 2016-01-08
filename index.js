@@ -124,14 +124,7 @@ StackUtils.prototype.at = function at(fn) {
 		column: site.getColumnNumber()
 	};
 
-	var file = site.getFileName();
-	if (file) {
-		file = file.replace(/\\/g, '/');
-		if (file.indexOf(this._cwd + '/') === 0) {
-			file = file.substr(this._cwd.length + 1);
-		}
-		res.file = file;
-	}
+	this._setFile(res, site.getFileName());
 
 	if (site.isConstructor()) {
 		res.constructor = true;
@@ -167,6 +160,16 @@ StackUtils.prototype.at = function at(fn) {
 	}
 
 	return res;
+};
+
+StackUtils.prototype._setFile = function (result, filename) {
+	if (filename) {
+		filename = filename.replace(/\\/g, '/');
+		if ((filename.indexOf(this._cwd + '/') === 0)) {
+			filename = filename.substr(this._cwd.length + 1);
+		}
+		result.file = filename;
+	}
 };
 
 var re = new RegExp(
@@ -219,13 +222,7 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 		res.column = Number(col);
 	}
 
-	if (file) {
-		file = file.replace(/\\/g, '/');
-		if ((file.indexOf(this._cwd + '/') === 0)) {
-			file = file.substr(this._cwd.length + 1);
-		}
-		res.file = file;
-	}
+	this._setFile(res, file);
 
 	if (ctor) {
 		res.constructor = true;
