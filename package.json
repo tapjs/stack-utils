@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Captures and cleans stack traces",
   "license": "MIT",
-  "repository": "jamestalmage/stack-utils",
+  "repository": "tapjs/stack-utils",
   "author": {
     "name": "James Talmage",
     "email": "james@talmage.io",
