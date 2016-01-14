@@ -12,15 +12,16 @@ function StackUtils(opts) {
 module.exports.nodeInternals = nodeInternals;
 
 function nodeInternals() {
-	// This was tap specific
-	// /node_modules[\\\/]tap[\\\/](.*?)\.js:[0-9]:[0-9]\)?$/
 	return [
-		/\(domain.js:[0-9]+:[0-9]+\)$/,
-		/\(events.js:[0-9]+:[0-9]+\)$/,
-		/\(node.js:[0-9]+:[0-9]+\)$/,
-		/\(timers.js:[0-9]+:[0-9]+\)$/,
-		/\(module.js:[0-9]+:[0-9]+\)$/,
-		/GeneratorFunctionPrototype.next \(native\)/
+		/\(native\)$/,
+		/\(domain.js:\d+:\d+\)$/,
+		/\(events.js:\d+:\d+\)$/,
+		/\(node.js:\d+:\d+\)$/,
+		/\(timers.js:\d+:\d+\)$/,
+		/\(module.js:\d+:\d+\)$/,
+		/\(internal\/[\w_-]+\.js:\d+:\d+\)$/,
+		/\s*at node\.js:\d+:\d+?$/,
+		/\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
 	];
 }
 
@@ -211,11 +212,11 @@ var re = new RegExp(
 		// (eval at <anonymous> (file.js:1:1),
 		// $4 = eval origin
 		// $5:$6:$7 are eval file/line/col, but not normally reported
-	'(?:eval at ([^ ]+) \\(([^\\)]+):([0-9]+):([0-9]+)\\), )?' +
+	'(?:eval at ([^ ]+) \\(([^\\)]+):(\\d+):(\\d+)\\), )?' +
 		// file:line:col
 		// $8:$9:$10
 		// $11 = 'native' if native
-	'(?:([^\\)]+):([0-9]+):([0-9]+)|(native))' +
+	'(?:([^\\)]+):(\\d+):(\\d+)|(native))' +
 		// maybe close the paren, then end
 	'\\)?$'
 );
