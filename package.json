@@ -1,6 +1,6 @@
 {
   "name": "stack-utils",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Captures and cleans stack traces",
   "license": "MIT",
   "repository": "tapjs/stack-utils",
