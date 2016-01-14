@@ -38,8 +38,8 @@ StackUtils.prototype.clean = function (stack) {
 	var lastNonAtLine = null;
 	var result = [];
 
-	stack.forEach(function (st1) {
-		var st = st1;
+	stack.forEach(function (st) {
+		st = st.replace(/\\/g, '/');
 		var isInternal = this._internals.some(function (internal) {
 			return internal.test(st);
 		});
@@ -59,9 +59,7 @@ StackUtils.prototype.clean = function (stack) {
 			}
 		}
 
-		st = st
-			.replace(/\\/g, '/')
-			.replace(this._cwd + '/', '');
+		st = st.replace(this._cwd + '/', '');
 
 		if (st) {
 			if (isAtLine) {

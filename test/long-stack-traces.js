@@ -8,13 +8,13 @@ import {join, fixtureDir} from './_utils';
 
 function internals() {
 	return StackUtils.nodeInternals().concat([
-		/[\\\/]long-stack-traces\.js:[0-9]+:[0-9]+\)?$/,
-		/[\\\/]internal-error\.js:[0-9]+:[0-9]+\)?$/,
-		/[\\\/]internal-then\.js:[0-9]+:[0-9]+\)?$/,
-		/[\\\/]node_modules[\\\/]/,
+		/\/long-stack-traces\.js:[0-9]+:[0-9]+\)?$/,
+		/\/internal-error\.js:[0-9]+:[0-9]+\)?$/,
+		/\/internal-then\.js:[0-9]+:[0-9]+\)?$/,
+		/\/node_modules\//,
 		// TODO: Should any of these be default internals?
-		/[\\\/]\.node-spawn-wrap-\w+-\w+[\\\/]node:[0-9]+:[0-9]+\)?$/,
-		/internal[\\\/]module\.js:[0-9]+:[0-9]+\)?$/,
+		/\/\.node-spawn-wrap-\w+-\w+\/node:[0-9]+:[0-9]+\)?$/,
+		/internal\/module\.js:[0-9]+:[0-9]+\)?$/,
 		/node\.js:[0-9]+:[0-9]+\)?$/
 	]);
 }

@@ -327,6 +327,6 @@ function internalStack() {
 function internals() {
 	return StackUtils.nodeInternals().concat([
 		/test\.js:[0-9]+:[0-9]+\)?$/,
-		/[\\\/]node_modules[\\\/]/
+		/\/node_modules\//
 	]);
 }
