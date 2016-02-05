@@ -56,7 +56,7 @@ test('clean: eliminates internals', t => {
 
 test('clean: returns null if it is all internals', t => {
 	const stack = new StackUtils({internals: StackUtils.nodeInternals()});
-	t.is(stack.clean(join(internalStack())), null);
+	t.is(stack.clean(join(internalStack())), '');
 });
 
 test('captureString: two redirects', t => {

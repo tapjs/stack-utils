@@ -81,7 +81,7 @@ StackUtils.prototype.clean = function (stack) {
 	if (stack) {
 		return stack + '\n';
 	}
-	return null;
+	return '';
 };
 
 StackUtils.prototype.captureString = function (limit, fn) {
