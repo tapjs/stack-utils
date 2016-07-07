@@ -21,7 +21,7 @@ const StackUtils = require('stack-utils');
 const stack = new StackUtils({cwd: process.cwd(), internals: StackUtils.nodeInternals()});
 
 console.log(stack.clean(new Error().stack));
-// outputs a beutified stack trace
+// outputs a beautified stack trace
 ```
 
 
