@@ -135,6 +135,26 @@ test('capture: with limit and stackStart function', t => {
 	t.is(stack[0].getFunctionName(), 'CaptureFixture.redirect2');
 });
 
+test('capture: with wrapCallSite function', t => {
+	var wrapper = function (frame) {
+		var object = {};
+		Object.getOwnPropertyNames(Object.getPrototypeOf(frame)).forEach(function (name) {
+			object[name] = /^(?:is|get)/.test(name) ? function () {
+				return frame[name];
+			} : frame[name];
+		});
+		object.getFunctionName = function () {
+			return 'testFunctionName';
+		};
+		return object;
+	};
+	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir, wrapCallSite: wrapper});
+	const capture = new CaptureFixture(stackUtil);
+	const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
+	t.is(stack.length, 1);
+	t.is(stack[0].getFunctionName(), 'testFunctionName');
+});
+
 test('at', t => {
 	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stackUtil);
