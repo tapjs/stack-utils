@@ -7,6 +7,7 @@ function StackUtils(opts) {
 	opts = opts || {};
 	this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/');
 	this._internals = opts.internals || [];
+	this._wrapCallSite = opts.wrapCallSite || false;
 }
 
 module.exports.nodeInternals = nodeInternals;
@@ -117,8 +118,14 @@ StackUtils.prototype.capture = function (limit, fn) {
 	}
 	var prepBefore = Error.prepareStackTrace;
 	var limitBefore = Error.stackTraceLimit;
+	var wrapCallSite = this._wrapCallSite;
 
 	Error.prepareStackTrace = function (obj, site) {
+		if (typeof wrapCallSite === 'function') {
+			return site.map(function (callSite) {
+				return wrapCallSite(callSite);
+			});
+		}
 		return site;
 	};
 
