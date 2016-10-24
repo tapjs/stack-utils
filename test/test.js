@@ -136,23 +136,22 @@ test('capture: with limit and stackStart function', t => {
 });
 
 test('capture: with wrapCallSite function', t => {
-	var wrapper = function (frame) {
-		var object = {};
-		Object.getOwnPropertyNames(Object.getPrototypeOf(frame)).forEach(function (name) {
-			object[name] = /^(?:is|get)/.test(name) ? function () {
-				return frame[name];
-			} : frame[name];
-		});
-		object.getFunctionName = function () {
-			return 'testFunctionName';
+	const wrapper = function (callsite) {
+		return {
+			getMethodName: function () {
+				return callsite.getMethodName();
+			},
+			getFunctionName: function () {
+				return 'testOverrideFunctionName';
+			}
 		};
-		return object;
 	};
 	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir, wrapCallSite: wrapper});
 	const capture = new CaptureFixture(stackUtil);
 	const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
 	t.is(stack.length, 1);
-	t.is(stack[0].getFunctionName(), 'testFunctionName');
+	t.is(stack[0].getFunctionName(), 'testOverrideFunctionName');
+	t.is(stack[0].getMethodName(), 'redirect2');
 });
 
 test('at', t => {
