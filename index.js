@@ -212,11 +212,11 @@ var re = new RegExp(
 		// (eval at <anonymous> (file.js:1:1),
 		// $4 = eval origin
 		// $5:$6:$7 are eval file/line/col, but not normally reported
-	'(?:eval at ([^ ]+) \\(([^\\)]+):(\\d+):(\\d+)\\), )?' +
+	'(?:eval at ([^ ]+) \\((.+):(\\d+):(\\d+)\\), )?' +
 		// file:line:col
 		// $8:$9:$10
 		// $11 = 'native' if native
-	'(?:([^\\)]+):(\\d+):(\\d+)|(native))' +
+	'(?:(.+):(\\d+):(\\d+)|(native))' +
 		// maybe close the paren, then end
 	'\\)?$'
 );
