@@ -51,7 +51,7 @@ The path to the current working directory. File names in the stack trace will be
 
 Type: `function(CallSite)`
 
-A function that will wrap the CallSite processed by the `StackUtils.capture()` function. The CallSite gets passed as a parameter to this function, and the function should return a new object wrapping the CallSite. Providing a CallSite wrapper enables the use of StackUtils with a source mapping module.
+A mapping function for manipulating CallSites before processing. The first argument is a CallSite instance, and the function should return a modified CallSite. This is useful for providing source map support.
 
 
 ### StackUtils.nodeInternals()

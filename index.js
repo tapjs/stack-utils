@@ -121,10 +121,8 @@ StackUtils.prototype.capture = function (limit, fn) {
 	var wrapCallSite = this._wrapCallSite;
 
 	Error.prepareStackTrace = function (obj, site) {
-		if (typeof wrapCallSite === 'function') {
-			return site.map(function (callSite) {
-				return wrapCallSite(callSite);
-			});
+		if (wrapCallSite) {
+			return site.map(wrapCallSite);
 		}
 		return site;
 	};
