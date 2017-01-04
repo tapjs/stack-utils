@@ -135,6 +135,25 @@ test('capture: with limit and stackStart function', t => {
 	t.is(stack[0].getFunctionName(), 'CaptureFixture.redirect2');
 });
 
+test('capture: with wrapCallSite function', t => {
+	const wrapper = function (callsite) {
+		return {
+			getMethodName: function () {
+				return callsite.getMethodName();
+			},
+			getFunctionName: function () {
+				return 'testOverrideFunctionName';
+			}
+		};
+	};
+	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir, wrapCallSite: wrapper});
+	const capture = new CaptureFixture(stackUtil);
+	const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
+	t.is(stack.length, 1);
+	t.is(stack[0].getFunctionName(), 'testOverrideFunctionName');
+	t.is(stack[0].getMethodName(), 'redirect2');
+});
+
 test('at', t => {
 	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
 	const capture = new CaptureFixture(stackUtil);

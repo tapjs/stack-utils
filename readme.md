@@ -47,6 +47,12 @@ Type: `string`
 
 The path to the current working directory. File names in the stack trace will be shown relative to this directory.
 
+##### wrapCallSite
+
+Type: `function(CallSite)`
+
+A mapping function for manipulating CallSites before processing. The first argument is a CallSite instance, and the function should return a modified CallSite. This is useful for providing source map support.
+
 
 ### StackUtils.nodeInternals()
 
