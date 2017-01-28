@@ -12,17 +12,17 @@ function StackUtils(opts) {
 module.exports.nodeInternals = nodeInternals;
 
 function nodeInternals() {
-	return [
-		/\(native\)$/,
-		/\(domain.js:\d+:\d+\)$/,
-		/\(events.js:\d+:\d+\)$/,
-		/\(node.js:\d+:\d+\)$/,
-		/\(timers.js:\d+:\d+\)$/,
-		/\(module.js:\d+:\d+\)$/,
-		/\(internal\/[\w_-]+\.js:\d+:\d+\)$/,
-		/\s*at node\.js:\d+:\d+?$/,
+	if (!module.exports.natives) {
+		module.exports.natives = Object.keys(process.binding('natives'));
+		module.exports.natives.push('bootstrap_node', 'node');
+	}
+
+	return module.exports.natives.map(function (n) {
+		return new RegExp('\\(' + n + '\\.js:\\d+:\\d+\\)$');
+	}).concat([
+		/\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
 		/\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
-	];
+	]);
 }
 
 StackUtils.prototype.clean = function (stack) {
