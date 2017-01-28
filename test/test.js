@@ -394,6 +394,16 @@ test('parseLine: handles native errors', t => {
 	});
 });
 
+test('parseLine: handles parens', t => {
+	var line = '    at X.<anonymous> (/USER/Db (Person)/x/y.js:14:11)';
+	t.same(StackUtils.parseLine(line), {
+		line: 14,
+		column: 11,
+		file: '/USER/Db (Person)/x/y.js',
+		function: 'X.<anonymous>'
+	});
+});
+
 function linuxStack1() {
 	return [
 		'Error: foo',
