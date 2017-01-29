@@ -7,22 +7,23 @@ function StackUtils(opts) {
 	opts = opts || {};
 	this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/');
 	this._internals = opts.internals || [];
+	this._wrapCallSite = opts.wrapCallSite || false;
 }
 
 module.exports.nodeInternals = nodeInternals;
 
 function nodeInternals() {
-	return [
-		/\(native\)$/,
-		/\(domain.js:\d+:\d+\)$/,
-		/\(events.js:\d+:\d+\)$/,
-		/\(node.js:\d+:\d+\)$/,
-		/\(timers.js:\d+:\d+\)$/,
-		/\(module.js:\d+:\d+\)$/,
-		/\(internal\/[\w_-]+\.js:\d+:\d+\)$/,
-		/\s*at node\.js:\d+:\d+?$/,
+	if (!module.exports.natives) {
+		module.exports.natives = Object.keys(process.binding('natives'));
+		module.exports.natives.push('bootstrap_node', 'node');
+	}
+
+	return module.exports.natives.map(function (n) {
+		return new RegExp('\\(' + n + '\\.js:\\d+:\\d+\\)$');
+	}).concat([
+		/\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
 		/\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
-	];
+	]);
 }
 
 StackUtils.prototype.clean = function (stack) {
@@ -117,8 +118,12 @@ StackUtils.prototype.capture = function (limit, fn) {
 	}
 	var prepBefore = Error.prepareStackTrace;
 	var limitBefore = Error.stackTraceLimit;
+	var wrapCallSite = this._wrapCallSite;
 
 	Error.prepareStackTrace = function (obj, site) {
+		if (wrapCallSite) {
+			return site.map(wrapCallSite);
+		}
 		return site;
 	};
 
@@ -212,11 +217,11 @@ var re = new RegExp(
 		// (eval at <anonymous> (file.js:1:1),
 		// $4 = eval origin
 		// $5:$6:$7 are eval file/line/col, but not normally reported
-	'(?:eval at ([^ ]+) \\(([^\\)]+):(\\d+):(\\d+)\\), )?' +
+	'(?:eval at ([^ ]+) \\((.+?):(\\d+):(\\d+)\\), )?' +
 		// file:line:col
 		// $8:$9:$10
 		// $11 = 'native' if native
-	'(?:([^\\)]+):(\\d+):(\\d+)|(native))' +
+	'(?:(.+?):(\\d+):(\\d+)|(native))' +
 		// maybe close the paren, then end
 	'\\)?$'
 );

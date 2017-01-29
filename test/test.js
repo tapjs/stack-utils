@@ -4,6 +4,98 @@ import StackUtils from '../';
 import CaptureFixture from './fixtures/capture-fixture';
 import {join, fixtureDir} from './_utils';
 
+// Use a fixed known set of native modules, since this changes
+// depending on the version of Node we're testing with.
+StackUtils.natives = [
+	'internal/bootstrap_node',
+	'_debug_agent',
+	'_debugger',
+	'assert',
+	'buffer',
+	'child_process',
+	'console',
+	'constants',
+	'crypto',
+	'cluster',
+	'dgram',
+	'dns',
+	'domain',
+	'events',
+	'fs',
+	'http',
+	'_http_agent',
+	'_http_client',
+	'_http_common',
+	'_http_incoming',
+	'_http_outgoing',
+	'_http_server',
+	'https',
+	'_linklist',
+	'module',
+	'net',
+	'os',
+	'path',
+	'process',
+	'punycode',
+	'querystring',
+	'readline',
+	'repl',
+	'stream',
+	'_stream_readable',
+	'_stream_writable',
+	'_stream_duplex',
+	'_stream_transform',
+	'_stream_passthrough',
+	'_stream_wrap',
+	'string_decoder',
+	'sys',
+	'timers',
+	'tls',
+	'_tls_common',
+	'_tls_legacy',
+	'_tls_wrap',
+	'tty',
+	'url',
+	'util',
+	'v8',
+	'vm',
+	'zlib',
+	'internal/buffer',
+	'internal/child_process',
+	'internal/cluster',
+	'internal/freelist',
+	'internal/fs',
+	'internal/linkedlist',
+	'internal/net',
+	'internal/module',
+	'internal/process/next_tick',
+	'internal/process/promises',
+	'internal/process/stdio',
+	'internal/process/warning',
+	'internal/process',
+	'internal/readline',
+	'internal/repl',
+	'internal/socket_list',
+	'internal/url',
+	'internal/util',
+	'internal/v8_prof_polyfill',
+	'internal/v8_prof_processor',
+	'internal/streams/lazy_transform',
+	'internal/streams/BufferList',
+	'v8/tools/splaytree',
+	'v8/tools/codemap',
+	'v8/tools/consarray',
+	'v8/tools/csvparser',
+	'v8/tools/profile',
+	'v8/tools/profile_view',
+	'v8/tools/logreader',
+	'v8/tools/tickprocessor',
+	'v8/tools/SourceMap',
+	'v8/tools/tickprocessor-driver',
+	'bootstrap_node',
+	'node'
+];
+
 const LinuxStack1 = join(linuxStack1(), internalStack());
 const WindowsStack1 = join(windowsStack1(), internalStack());
 
@@ -23,11 +115,20 @@ test('clean: truncates cwd', t => {
 		'bar (foo.js:7:2)',
 		'bar (bar.js:4:2)',
 		'Object.<anonymous> (bar.js:7:1)',
+		'ontimeout (timers.js:365:14)',
+		'tryOnTimeout (timers.js:237:5)',
+		'Timer.listOnTimeout (timers.js:207:5)',
+		'_combinedTickCallback (internal/process/next_tick.js:67:7)',
+		'process._tickCallback (internal/process/next_tick.js:98:9)',
+		'Module.runMain (module.js:645:11)',
 		'Module._compile (module.js:398:26)',
 		'Object.Module._extensions..js (module.js:405:10)',
 		'Module.load (module.js:344:32)',
 		'Function.Module._load (module.js:301:12)',
 		'Function.Module.runMain (module.js:430:10)',
+		'run (bootstrap_node.js:420:7)',
+		'startup (bootstrap_node.js:139:9)',
+		'bootstrap_node.js:535:3',
 		'startup (node.js:141:18)'
 	]);
 
@@ -133,6 +234,25 @@ test('capture: with limit and stackStart function', t => {
 	const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
 	t.is(stack.length, 1);
 	t.is(stack[0].getFunctionName(), 'CaptureFixture.redirect2');
+});
+
+test('capture: with wrapCallSite function', t => {
+	const wrapper = function (callsite) {
+		return {
+			getMethodName: function () {
+				return callsite.getMethodName();
+			},
+			getFunctionName: function () {
+				return 'testOverrideFunctionName';
+			}
+		};
+	};
+	const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir, wrapCallSite: wrapper});
+	const capture = new CaptureFixture(stackUtil);
+	const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
+	t.is(stack.length, 1);
+	t.is(stack[0].getFunctionName(), 'testOverrideFunctionName');
+	t.is(stack[0].getMethodName(), 'redirect2');
 });
 
 test('at', t => {
@@ -293,6 +413,16 @@ test('parseLine: handles native errors', t => {
 	});
 });
 
+test('parseLine: handles parens', t => {
+	var line = '    at X.<anonymous> (/USER/Db (Person)/x/y.js:14:11)';
+	t.same(StackUtils.parseLine(line), {
+		line: 14,
+		column: 11,
+		file: '/USER/Db (Person)/x/y.js',
+		function: 'X.<anonymous>'
+	});
+});
+
 function linuxStack1() {
 	return [
 		'Error: foo',
@@ -315,11 +445,20 @@ function windowsStack1() {
 
 function internalStack() {
 	return [
+		'    at ontimeout (timers.js:365:14)',
+		'    at tryOnTimeout (timers.js:237:5)',
+		'    at Timer.listOnTimeout (timers.js:207:5)',
+		'    at _combinedTickCallback (internal/process/next_tick.js:67:7)',
+		'    at process._tickCallback (internal/process/next_tick.js:98:9)',
+		'    at Module.runMain (module.js:645:11)',
 		'    at Module._compile (module.js:398:26)',
 		'    at Object.Module._extensions..js (module.js:405:10)',
 		'    at Module.load (module.js:344:32)',
 		'    at Function.Module._load (module.js:301:12)',
 		'    at Function.Module.runMain (module.js:430:10)',
+		'    at run (bootstrap_node.js:420:7)',
+		'    at startup (bootstrap_node.js:139:9)',
+		'    at bootstrap_node.js:535:3',
 		'    at startup (node.js:141:18)'
 	];
 }
