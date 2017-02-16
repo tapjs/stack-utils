@@ -99,10 +99,6 @@ StackUtils.natives = [
 const LinuxStack1 = join(linuxStack1(), internalStack());
 const WindowsStack1 = join(windowsStack1(), internalStack());
 
-const version = process.version.slice(1).split('.').map(function (val) {
-  return parseInt(val, 10);
-});
-
 t.test('must be called with new', t => {
   t.is(typeof StackUtils, 'function');
   const stackUtils = StackUtils;
@@ -356,12 +352,6 @@ t.test('at: eval', t => {
     function: 'eval'
   };
 
-  // TODO: There are some inconsistencies between this and how `parseLine` works.
-  if (version[0] < 4) {
-    expected.type = 'CaptureFixture';
-    expected.function = 'eval';
-  }
-
   t.match(at, expected);
   t.end()
 });
@@ -415,10 +405,6 @@ t.test('parseLine', t => {
     evalFile: path.join(fixtureDir, 'capture-fixture.js').replace(/\\/g, '/'),
     function: 'eval'
   };
-
-  if (version[0] < 4) {
-    expected.function = 'CaptureFixture.eval';
-  }
 
   const actual = stack.parseLine(evalStack[2]);
 
