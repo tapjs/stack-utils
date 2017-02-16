@@ -1,23 +1,23 @@
-'use strict';
+'use strict'
 
-module.exports = StackUtils;
+module.exports = StackUtils
 
-function StackUtils(opts) {
+function StackUtils (opts) {
   if (!(this instanceof StackUtils)) {
-    throw new Error('StackUtils constructor must be called with new');
+    throw new Error('StackUtils constructor must be called with new')
   }
-  opts = opts || {};
-  this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/');
-  this._internals = opts.internals || [];
-  this._wrapCallSite = opts.wrapCallSite || false;
+  opts = opts || {}
+  this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/')
+  this._internals = opts.internals || []
+  this._wrapCallSite = opts.wrapCallSite || false
 }
 
-module.exports.nodeInternals = nodeInternals;
+module.exports.nodeInternals = nodeInternals
 
-function nodeInternals() {
+function nodeInternals () {
   if (!module.exports.natives) {
-    module.exports.natives = Object.keys(process.binding('natives'));
-    module.exports.natives.push('bootstrap_node', 'node');
+    module.exports.natives = Object.keys(process.binding('natives'))
+    module.exports.natives.push('bootstrap_node', 'node')
   }
 
   return module.exports.natives
@@ -25,184 +25,184 @@ function nodeInternals() {
     .concat([
       /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
       /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
-    ]);
+    ])
 }
 
 StackUtils.prototype.clean = function (stack) {
   if (!Array.isArray(stack)) {
-    stack = stack.split('\n');
+    stack = stack.split('\n')
   }
 
   if (!(/^\s*at /.test(stack[0])) &&
     (/^\s*at /.test(stack[1]))) {
-    stack = stack.slice(1);
+    stack = stack.slice(1)
   }
 
-  let outdent = false;
-  let lastNonAtLine = null;
-  const result = [];
+  let outdent = false
+  let lastNonAtLine = null
+  const result = []
 
   stack.forEach(function (st) {
-    st = st.replace(/\\/g, '/');
-    const isInternal = this._internals.some(internal => internal.test(st));
+    st = st.replace(/\\/g, '/')
+    const isInternal = this._internals.some(internal => internal.test(st))
 
     if (isInternal) {
-      return null;
+      return null
     }
 
-    const isAtLine = /^\s*at /.test(st);
+    const isAtLine = /^\s*at /.test(st)
 
     if (outdent) {
-      st = st.replace(/\s+$/, '').replace(/^(\s+)at /, '$1');
+      st = st.replace(/\s+$/, '').replace(/^(\s+)at /, '$1')
     } else {
-      st = st.trim();
+      st = st.trim()
       if (isAtLine) {
-        st = st.substring(3);
+        st = st.substring(3)
       }
     }
 
-    st = st.replace(`${this._cwd}/`, '');
+    st = st.replace(`${this._cwd}/`, '')
 
     if (st) {
       if (isAtLine) {
         if (lastNonAtLine) {
-          result.push(lastNonAtLine);
-          lastNonAtLine = null;
+          result.push(lastNonAtLine)
+          lastNonAtLine = null
         }
-        result.push(st);
+        result.push(st)
       } else {
-        outdent = true;
-        lastNonAtLine = st;
+        outdent = true
+        lastNonAtLine = st
       }
     }
-  }, this);
+  }, this)
 
-  stack = result.join('\n').trim();
+  stack = result.join('\n').trim()
 
   if (stack) {
-    return `${stack}\n`;
+    return `${stack}\n`
   }
-  return '';
-};
+  return ''
+}
 
 StackUtils.prototype.captureString = function (limit, fn) {
   if (typeof limit === 'function') {
-    fn = limit;
-    limit = Infinity;
+    fn = limit
+    limit = Infinity
   }
   if (!fn) {
-    fn = this.captureString;
+    fn = this.captureString
   }
 
-  const limitBefore = Error.stackTraceLimit;
+  const limitBefore = Error.stackTraceLimit
   if (limit) {
-    Error.stackTraceLimit = limit;
+    Error.stackTraceLimit = limit
   }
 
-  const obj = {};
+  const obj = {}
 
-  Error.captureStackTrace(obj, fn);
-  const stack = obj.stack;
-  Error.stackTraceLimit = limitBefore;
+  Error.captureStackTrace(obj, fn)
+  const stack = obj.stack
+  Error.stackTraceLimit = limitBefore
 
-  return this.clean(stack);
-};
+  return this.clean(stack)
+}
 
 StackUtils.prototype.capture = function (limit, fn) {
   if (typeof limit === 'function') {
-    fn = limit;
-    limit = Infinity;
+    fn = limit
+    limit = Infinity
   }
   if (!fn) {
-    fn = this.capture;
+    fn = this.capture
   }
-  const prepBefore = Error.prepareStackTrace;
-  const limitBefore = Error.stackTraceLimit;
-  const wrapCallSite = this._wrapCallSite;
+  const prepBefore = Error.prepareStackTrace
+  const limitBefore = Error.stackTraceLimit
+  const wrapCallSite = this._wrapCallSite
 
   Error.prepareStackTrace = (obj, site) => {
     if (wrapCallSite) {
-      return site.map(wrapCallSite);
+      return site.map(wrapCallSite)
     }
-    return site;
-  };
+    return site
+  }
 
   if (limit) {
-    Error.stackTraceLimit = limit;
+    Error.stackTraceLimit = limit
   }
 
-  const obj = {};
-  Error.captureStackTrace(obj, fn);
-  const stack = obj.stack;
-  Error.prepareStackTrace = prepBefore;
-  Error.stackTraceLimit = limitBefore;
+  const obj = {}
+  Error.captureStackTrace(obj, fn)
+  const stack = obj.stack
+  Error.prepareStackTrace = prepBefore
+  Error.stackTraceLimit = limitBefore
 
-  return stack;
-};
+  return stack
+}
 
-StackUtils.prototype.at = function at(fn) {
+StackUtils.prototype.at = function at (fn) {
   if (!fn) {
-    fn = at;
+    fn = at
   }
 
-  const site = this.capture(1, fn)[0];
+  const site = this.capture(1, fn)[0]
 
   if (!site) {
-    return {};
+    return {}
   }
 
   const res = {
     line: site.getLineNumber(),
     column: site.getColumnNumber()
-  };
+  }
 
-  this._setFile(res, site.getFileName());
+  this._setFile(res, site.getFileName())
 
   if (site.isConstructor()) {
-    res.constructor = true;
+    res.constructor = true
   }
 
   if (site.isEval()) {
-    res.evalOrigin = site.getEvalOrigin();
+    res.evalOrigin = site.getEvalOrigin()
   }
 
   if (site.isNative()) {
-    res.native = true;
+    res.native = true
   }
 
-  let typename = null;
+  let typename = null
   try {
-    typename = site.getTypeName();
+    typename = site.getTypeName()
   } catch (er) {}
 
   if (typename &&
     typename !== 'Object' &&
     typename !== '[object Object]') {
-    res.type = typename;
+    res.type = typename
   }
 
-  const fname = site.getFunctionName();
+  const fname = site.getFunctionName()
   if (fname) {
-    res.function = fname;
+    res.function = fname
   }
 
-  const meth = site.getMethodName();
+  const meth = site.getMethodName()
   if (meth && fname !== meth) {
-    res.method = meth;
+    res.method = meth
   }
 
-  return res;
-};
+  return res
+}
 
 StackUtils.prototype._setFile = function (result, filename) {
   if (filename) {
-    filename = filename.replace(/\\/g, '/');
+    filename = filename.replace(/\\/g, '/')
     if ((filename.indexOf(`${this._cwd}/`) === 0)) {
-      filename = filename.substr(this._cwd.length + 1);
+      filename = filename.substr(this._cwd.length + 1)
     }
-    result.file = filename;
+    result.file = filename
   }
-};
+}
 
 const re = new RegExp(
   '^' +
@@ -224,66 +224,66 @@ const re = new RegExp(
   '(?:(.+?):(\\d+):(\\d+)|(native))' +
     // maybe close the paren, then end
   '\\)?$'
-);
+)
 
-StackUtils.prototype.parseLine = function parseLine(line) {
-  const match = line && line.match(re);
+StackUtils.prototype.parseLine = function parseLine (line) {
+  const match = line && line.match(re)
   if (!match) {
-    return null;
+    return null
   }
 
-  const ctor = match[1] === 'new';
-  const fname = match[2];
-  const meth = match[3];
-  const evalOrigin = match[4];
-  const evalFile = match[5];
-  const evalLine = Number(match[6]);
-  const evalCol = Number(match[7]);
-  const file = match[8];
-  const lnum = match[9];
-  const col = match[10];
-  const native = match[11] === 'native';
+  const ctor = match[1] === 'new'
+  const fname = match[2]
+  const meth = match[3]
+  const evalOrigin = match[4]
+  const evalFile = match[5]
+  const evalLine = Number(match[6])
+  const evalCol = Number(match[7])
+  const file = match[8]
+  const lnum = match[9]
+  const col = match[10]
+  const native = match[11] === 'native'
 
-  const res = {};
+  const res = {}
 
   if (lnum) {
-    res.line = Number(lnum);
+    res.line = Number(lnum)
   }
 
   if (col) {
-    res.column = Number(col);
+    res.column = Number(col)
   }
 
-  this._setFile(res, file);
+  this._setFile(res, file)
 
   if (ctor) {
-    res.constructor = true;
+    res.constructor = true
   }
 
   if (evalOrigin) {
-    res.evalOrigin = evalOrigin;
-    res.evalLine = evalLine;
-    res.evalColumn = evalCol;
-    res.evalFile = evalFile && evalFile.replace(/\\/g, '/');
+    res.evalOrigin = evalOrigin
+    res.evalLine = evalLine
+    res.evalColumn = evalCol
+    res.evalFile = evalFile && evalFile.replace(/\\/g, '/')
   }
 
   if (native) {
-    res.native = true;
+    res.native = true
   }
 
   if (fname) {
-    res.function = fname;
+    res.function = fname
   }
 
   if (meth && fname !== meth) {
-    res.method = meth;
+    res.method = meth
   }
 
-  return res;
-};
+  return res
+}
 
-const bound = new StackUtils();
+const bound = new StackUtils()
 
 Object.keys(StackUtils.prototype).forEach(key => {
-  StackUtils[key] = bound[key].bind(bound);
-});
+  StackUtils[key] = bound[key].bind(bound)
+})
