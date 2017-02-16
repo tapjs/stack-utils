@@ -10,10 +10,11 @@
     "url": "github.com/jamestalmage"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
-    "test": "tap test/*.js --cov"
+    "test": "tap test/*.js --cov",
+    "posttest": "standard"
   },
   "files": [
     "index.js"
@@ -29,6 +30,7 @@
     "nested-error-stacks": "^2.0.0",
     "pify": "^2.3.0",
     "q": "^1.4.1",
+    "standard": "^8.6.0",
     "tap": "^10.0.0"
   }
 }
