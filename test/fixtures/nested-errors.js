@@ -1,8 +1,8 @@
 'use strict';
 
-var NestedError = require('nested-error-stacks');
-var util = require('util');
-var internal = require('./internal-error');
+const NestedError = require('nested-error-stacks');
+const util = require('util');
+const internal = require('./internal-error');
 
 function foo(cb) {
 	bar(function nested(err) {

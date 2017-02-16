@@ -9,9 +9,6 @@ module.exports = function internalLibraryOuterFn(then) {
 
 module.exports.reject = function internalLibraryOuterReject() {
 	return global.InternalPromise.resolve().then(function internalLibraryInnerReject() {
-		return global.InternalPromise.reject(new Error('inner')).catch(function (e) {
-			return e.stack;
-		});
+		return global.InternalPromise.reject(new Error('inner')).catch(e => e.stack);
 	});
 };
-

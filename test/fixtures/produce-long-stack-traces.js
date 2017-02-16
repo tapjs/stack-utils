@@ -1,7 +1,7 @@
 'use strict';
 
-var Promise = global.InternalPromise;
-var internalThen = require('./internal-then');
+const Promise = global.InternalPromise;
+const internalThen = require('./internal-then');
 
 module.exports = Promise.resolve().then(function outer() {
 	return Promise.resolve().then(function inner() {
@@ -35,7 +35,7 @@ module.exports.top = Promise.resolve().then(function outer() {
 	});
 });
 
-module.exports.bottom = new Promise(function (resolve) {
+module.exports.bottom = new Promise(resolve => {
 	setTimeout(internalThen.bind(null, function outer() {
 		return Promise.resolve().then(function inner() {
 			return Promise.resolve().then(function evenMoreInner() {

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = StackUtils;
 
 function StackUtils(opts) {
@@ -18,12 +20,12 @@ function nodeInternals() {
     module.exports.natives.push('bootstrap_node', 'node');
   }
 
-  return module.exports.natives.map(function (n) {
-    return new RegExp('\\(' + n + '\\.js:\\d+:\\d+\\)$');
-  }).concat([
-    /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
-    /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
-  ]);
+  return module.exports.natives
+    .map(n => new RegExp(`\\(${n}\\.js:\\d+:\\d+\\)$`))
+    .concat([
+      /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
+      /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
+    ]);
 }
 
 StackUtils.prototype.clean = function (stack) {
@@ -36,21 +38,19 @@ StackUtils.prototype.clean = function (stack) {
     stack = stack.slice(1);
   }
 
-  var outdent = false;
-  var lastNonAtLine = null;
-  var result = [];
+  let outdent = false;
+  let lastNonAtLine = null;
+  const result = [];
 
   stack.forEach(function (st) {
     st = st.replace(/\\/g, '/');
-    var isInternal = this._internals.some(function (internal) {
-      return internal.test(st);
-    });
+    const isInternal = this._internals.some(internal => internal.test(st));
 
     if (isInternal) {
       return null;
     }
 
-    var isAtLine = /^\s*at /.test(st);
+    const isAtLine = /^\s*at /.test(st);
 
     if (outdent) {
       st = st.replace(/\s+$/, '').replace(/^(\s+)at /, '$1');
@@ -61,7 +61,7 @@ StackUtils.prototype.clean = function (stack) {
       }
     }
 
-    st = st.replace(this._cwd + '/', '');
+    st = st.replace(`${this._cwd}/`, '');
 
     if (st) {
       if (isAtLine) {
@@ -80,7 +80,7 @@ StackUtils.prototype.clean = function (stack) {
   stack = result.join('\n').trim();
 
   if (stack) {
-    return stack + '\n';
+    return `${stack}\n`;
   }
   return '';
 };
@@ -94,15 +94,15 @@ StackUtils.prototype.captureString = function (limit, fn) {
     fn = this.captureString;
   }
 
-  var limitBefore = Error.stackTraceLimit;
+  const limitBefore = Error.stackTraceLimit;
   if (limit) {
     Error.stackTraceLimit = limit;
   }
 
-  var obj = {};
+  const obj = {};
 
   Error.captureStackTrace(obj, fn);
-  var stack = obj.stack;
+  const stack = obj.stack;
   Error.stackTraceLimit = limitBefore;
 
   return this.clean(stack);
@@ -116,11 +116,11 @@ StackUtils.prototype.capture = function (limit, fn) {
   if (!fn) {
     fn = this.capture;
   }
-  var prepBefore = Error.prepareStackTrace;
-  var limitBefore = Error.stackTraceLimit;
-  var wrapCallSite = this._wrapCallSite;
+  const prepBefore = Error.prepareStackTrace;
+  const limitBefore = Error.stackTraceLimit;
+  const wrapCallSite = this._wrapCallSite;
 
-  Error.prepareStackTrace = function (obj, site) {
+  Error.prepareStackTrace = (obj, site) => {
     if (wrapCallSite) {
       return site.map(wrapCallSite);
     }
@@ -131,9 +131,9 @@ StackUtils.prototype.capture = function (limit, fn) {
     Error.stackTraceLimit = limit;
   }
 
-  var obj = {};
+  const obj = {};
   Error.captureStackTrace(obj, fn);
-  var stack = obj.stack;
+  const stack = obj.stack;
   Error.prepareStackTrace = prepBefore;
   Error.stackTraceLimit = limitBefore;
 
@@ -145,13 +145,13 @@ StackUtils.prototype.at = function at(fn) {
     fn = at;
   }
 
-  var site = this.capture(1, fn)[0];
+  const site = this.capture(1, fn)[0];
 
   if (!site) {
     return {};
   }
 
-  var res = {
+  const res = {
     line: site.getLineNumber(),
     column: site.getColumnNumber()
   };
@@ -170,7 +170,7 @@ StackUtils.prototype.at = function at(fn) {
     res.native = true;
   }
 
-  var typename = null;
+  let typename = null;
   try {
     typename = site.getTypeName();
   } catch (er) {}
@@ -181,12 +181,12 @@ StackUtils.prototype.at = function at(fn) {
     res.type = typename;
   }
 
-  var fname = site.getFunctionName();
+  const fname = site.getFunctionName();
   if (fname) {
     res.function = fname;
   }
 
-  var meth = site.getMethodName();
+  const meth = site.getMethodName();
   if (meth && fname !== meth) {
     res.method = meth;
   }
@@ -197,14 +197,14 @@ StackUtils.prototype.at = function at(fn) {
 StackUtils.prototype._setFile = function (result, filename) {
   if (filename) {
     filename = filename.replace(/\\/g, '/');
-    if ((filename.indexOf(this._cwd + '/') === 0)) {
+    if ((filename.indexOf(`${this._cwd}/`) === 0)) {
       filename = filename.substr(this._cwd.length + 1);
     }
     result.file = filename;
   }
 };
 
-var re = new RegExp(
+const re = new RegExp(
   '^' +
     // Sometimes we strip out the '    at' because it's noisy
   '(?:\\s*at )?' +
@@ -227,24 +227,24 @@ var re = new RegExp(
 );
 
 StackUtils.prototype.parseLine = function parseLine(line) {
-  var match = line && line.match(re);
+  const match = line && line.match(re);
   if (!match) {
     return null;
   }
 
-  var ctor = match[1] === 'new';
-  var fname = match[2];
-  var meth = match[3];
-  var evalOrigin = match[4];
-  var evalFile = match[5];
-  var evalLine = Number(match[6]);
-  var evalCol = Number(match[7]);
-  var file = match[8];
-  var lnum = match[9];
-  var col = match[10];
-  var native = match[11] === 'native';
+  const ctor = match[1] === 'new';
+  const fname = match[2];
+  const meth = match[3];
+  const evalOrigin = match[4];
+  const evalFile = match[5];
+  const evalLine = Number(match[6]);
+  const evalCol = Number(match[7]);
+  const file = match[8];
+  const lnum = match[9];
+  const col = match[10];
+  const native = match[11] === 'native';
 
-  var res = {};
+  const res = {};
 
   if (lnum) {
     res.line = Number(lnum);
@@ -282,8 +282,8 @@ StackUtils.prototype.parseLine = function parseLine(line) {
   return res;
 };
 
-var bound = new StackUtils();
+const bound = new StackUtils();
 
-Object.keys(StackUtils.prototype).forEach(function (key) {
+Object.keys(StackUtils.prototype).forEach(key => {
   StackUtils[key] = bound[key].bind(bound);
 });

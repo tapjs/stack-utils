@@ -6,27 +6,27 @@ function CaptureFixture(stack) {
 }
 
 CaptureFixture.prototype.redirect1 = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
+	const args = Array.prototype.slice.call(arguments);
+	const method = args.shift();
 	return this[method].apply(this, args);
 };
 
 CaptureFixture.prototype.redirect2 = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
+	const args = Array.prototype.slice.call(arguments);
+	const method = args.shift();
 	return this[method].apply(this, args);
 };
 
 CaptureFixture.prototype.call = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
+	const args = Array.prototype.slice.call(arguments);
+	const method = args.shift();
 	return this.stack[method].apply(this.stack, args);
 };
 
 CaptureFixture.prototype.const = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	var self = this;
+	const args = Array.prototype.slice.call(arguments);
+	const method = args.shift();
+	const self = this;
 
 	function Constructor() {
 		this.val = self[method].apply(self, args);
@@ -36,12 +36,12 @@ CaptureFixture.prototype.const = function () {
 };
 
 CaptureFixture.prototype.obj = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var methodName = args.shift();
-	var method = args.shift();
-	var self = this;
+	const args = Array.prototype.slice.call(arguments);
+	const methodName = args.shift();
+	const method = args.shift();
+	const self = this;
 
-	var obj = {};
+	const obj = {};
 	obj[methodName] = function () {
 		return self[method].apply(self, args);
 	};
@@ -50,9 +50,9 @@ CaptureFixture.prototype.obj = function () {
 };
 
 CaptureFixture.prototype.eval = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	var self = this;
+	const args = Array.prototype.slice.call(arguments);
+	const method = args.shift();
+	const self = this;
 
 	return eval('self[method].apply(self, args)');
 };
