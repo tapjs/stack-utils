@@ -378,6 +378,14 @@ t.test('parseLine', t => {
     function: 'SomeClass.someFunc'
   })
 
+  // { "foo bar" () { throw new Error() } }
+  t.same(stack.parseLine('    at Object.foo bar (/user/dev/project/foo.js:3:8)'), {
+    file: 'foo.js',
+    line: 3,
+    column: 8,
+    function: 'Object.foo bar'
+  });
+
   t.same(stack.parseLine('    at foo (/some/other/dir/file.js:3:8)'), {
     file: '/some/other/dir/file.js',
     line: 3,
