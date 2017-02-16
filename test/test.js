@@ -1,8 +1,10 @@
+'use strict';
+
 const path = require('path');
 const t = require('tap');
 const StackUtils = require('../');
 const CaptureFixture = require('./fixtures/capture-fixture');
-const {join, fixtureDir} = require('./_utils');
+const utils = require('./_utils');
 
 // Use a fixed known set of native modules, since this changes
 // depending on the version of Node we're testing with.
@@ -96,8 +98,8 @@ StackUtils.natives = [
   'node'
 ];
 
-const LinuxStack1 = join(linuxStack1(), internalStack());
-const WindowsStack1 = join(windowsStack1(), internalStack());
+const LinuxStack1 = utils.join(linuxStack1(), internalStack());
+const WindowsStack1 = utils.join(windowsStack1(), internalStack());
 
 t.test('must be called with new', t => {
   t.is(typeof StackUtils, 'function');
@@ -107,7 +109,7 @@ t.test('must be called with new', t => {
 });
 
 t.test('clean: truncates cwd', t => {
-  const expected = join([
+  const expected = utils.join([
     'foo (foo.js:3:8)',
     'bar (foo.js:7:2)',
     'bar (bar.js:4:2)',
@@ -141,7 +143,7 @@ t.test('clean: truncates cwd', t => {
 
 t.test('clean: eliminates internals', t => {
   let stack = new StackUtils({cwd: '/user/dev', internals: StackUtils.nodeInternals()});
-  var expected = join([
+  var expected = utils.join([
     'foo (project/foo.js:3:8)',
     'bar (project/foo.js:7:2)',
     'bar (project/bar.js:4:2)',
@@ -156,16 +158,16 @@ t.test('clean: eliminates internals', t => {
 
 t.test('clean: returns null if it is all internals', t => {
   const stack = new StackUtils({internals: StackUtils.nodeInternals()});
-  t.is(stack.clean(join(internalStack())), '');
+  t.is(stack.clean(utils.join(internalStack())), '');
   t.end()
 });
 
 t.test('captureString: two redirects', t => {
-  const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stack = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stack);
 
   const capturedString = capture.redirect1('redirect2', 'call', 'captureString');
-  t.is(capturedString, join([
+  t.is(capturedString, utils.join([
     'CaptureFixture.call (capture-fixture.js:23:28)',
     'CaptureFixture.redirect2 (capture-fixture.js:17:22)',
     'CaptureFixture.redirect1 (capture-fixture.js:11:22)'
@@ -174,11 +176,11 @@ t.test('captureString: two redirects', t => {
 });
 
 t.test('captureString: with startStack function', t => {
-  const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stack = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stack);
 
   const capturedString = capture.redirect1('redirect2', 'call', 'captureString', capture.call);
-  t.is(capturedString, join([
+  t.is(capturedString, utils.join([
     'CaptureFixture.redirect2 (capture-fixture.js:17:22)',
     'CaptureFixture.redirect1 (capture-fixture.js:11:22)'
   ]));
@@ -186,39 +188,39 @@ t.test('captureString: with startStack function', t => {
 });
 
 t.test('captureString: with limit', t => {
-  const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stack = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stack);
 
   const capturedString = capture.redirect1('redirect2', 'call', 'captureString', 1);
-  t.is(capturedString, join([
+  t.is(capturedString, utils.join([
     'CaptureFixture.call (capture-fixture.js:23:28)'
   ]));
   t.end()
 });
 
 t.test('captureString: with limit and startStack', t => {
-  const stack = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stack = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stack);
 
   const capturedString = capture.redirect1('redirect2', 'call', 'captureString', 1, capture.call);
-  t.is(capturedString, join([
+  t.is(capturedString, utils.join([
     'CaptureFixture.redirect2 (capture-fixture.js:17:22)'
   ]));
   t.end()
 });
 
 t.test('capture returns an array of call sites', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
   const stack = capture.redirect1('call', 'capture').slice(0, 2);
-  t.is(stack[0].getFileName(), path.join(fixtureDir, 'capture-fixture.js'));
+  t.is(stack[0].getFileName(), path.join(utils.fixtureDir, 'capture-fixture.js'));
   t.is(stack[0].getFunctionName(), 'CaptureFixture.call');
   t.is(stack[1].getFunctionName(), 'CaptureFixture.redirect1');
   t.end()
 });
 
 t.test('capture: with limit', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
   const stack = capture.redirect1('redirect2', 'call', 'capture', 1);
   t.is(stack.length, 1);
@@ -227,7 +229,7 @@ t.test('capture: with limit', t => {
 });
 
 t.test('capture: with stackStart function', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
   const stack = capture.redirect1('redirect2', 'call', 'capture', capture.call);
   t.true(stack.length > 1);
@@ -236,7 +238,7 @@ t.test('capture: with stackStart function', t => {
 });
 
 t.test('capture: with limit and stackStart function', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
   const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
   t.is(stack.length, 1);
@@ -255,7 +257,7 @@ t.test('capture: with wrapCallSite function', t => {
       }
     };
   };
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir, wrapCallSite: wrapper});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir, wrapCallSite: wrapper});
   const capture = new CaptureFixture(stackUtil);
   const stack = capture.redirect1('redirect2', 'call', 'capture', 1, capture.call);
   t.is(stack.length, 1);
@@ -265,7 +267,7 @@ t.test('capture: with wrapCallSite function', t => {
 });
 
 t.test('at', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
   const at = capture.redirect1('call', 'at');
 
@@ -298,7 +300,7 @@ t.test('at: with stackStart', t => {
 });
 
 t.test('at: inside a constructor call', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
 
   const at = capture.const('call', 'at', capture.call);
@@ -316,7 +318,7 @@ t.test('at: inside a constructor call', t => {
 });
 
 t.test('at: method on an [Object] instance', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
 
   const at = capture.const('obj', 'foo', 'call', 'at', capture.call);
@@ -341,7 +343,7 @@ t.test('at: returns empty object if #capture() returns an empty stack', t => {
 });
 
 t.test('at: eval', t => {
-  const stackUtil = new StackUtils({internals: internals(), cwd: fixtureDir});
+  const stackUtil = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
   const capture = new CaptureFixture(stackUtil);
 
   const at = capture.eval('call', 'at', capture.call);
@@ -402,7 +404,7 @@ t.test('parseLine', t => {
     evalOrigin: /CaptureFixture.eval|<anonymous>/,
     evalLine: 57,
     evalColumn: 9,
-    evalFile: path.join(fixtureDir, 'capture-fixture.js').replace(/\\/g, '/'),
+    evalFile: path.join(utils.fixtureDir, 'capture-fixture.js').replace(/\\/g, '/'),
     function: 'eval'
   };
 
