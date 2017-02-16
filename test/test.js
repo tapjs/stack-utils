@@ -384,7 +384,15 @@ t.test('parseLine', t => {
     line: 3,
     column: 8,
     function: 'Object.foo bar'
-  });
+  })
+
+  // Array.from({ *[Symbol.iterator] () { throw new Error() } })
+  t.same(stack.parseLine('    at Object.[Symbol.iterator] (/user/dev/project/foo.js:3:8)'), {
+    file: 'foo.js',
+    line: 3,
+    column: 8,
+    function: 'Object.[Symbol.iterator]'
+  })
 
   t.same(stack.parseLine('    at foo (/some/other/dir/file.js:3:8)'), {
     file: '/some/other/dir/file.js',

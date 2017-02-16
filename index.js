@@ -214,13 +214,16 @@ const re = new RegExp(
     // $2 = function name
     // $3 = method name
   '(?:([^\\(\\[]*)(?: \\[as ([^\\]]+)\\])? \\()?' +
+    // Object.[Symbol.…] (, maybe
+    // $4 = function name
+  '(?:([^\\(\\[]+\\[Symbol\\..+?\\]) \\()?' +
     // (eval at <anonymous> (file.js:1:1),
-    // $4 = eval origin
-    // $5:$6:$7 are eval file/line/col, but not normally reported
+    // $5 = eval origin
+    // $6:$7:$8 are eval file/line/col, but not normally reported
   '(?:eval at ([^ ]+) \\((.+?):(\\d+):(\\d+)\\), )?' +
     // file:line:col
-    // $8:$9:$10
-    // $11 = 'native' if native
+    // $9:$10:$11
+    // $12 = 'native' if native
   '(?:(.+?):(\\d+):(\\d+)|(native))' +
     // maybe close the paren, then end
   '\\)?$'
@@ -235,14 +238,15 @@ StackUtils.prototype.parseLine = function parseLine (line) {
   const ctor = match[1] === 'new'
   const fname = match[2]
   const meth = match[3]
-  const evalOrigin = match[4]
-  const evalFile = match[5]
-  const evalLine = Number(match[6])
-  const evalCol = Number(match[7])
-  const file = match[8]
-  const lnum = match[9]
-  const col = match[10]
-  const native = match[11] === 'native'
+  const symbolFname = match[4]
+  const evalOrigin = match[5]
+  const evalFile = match[6]
+  const evalLine = Number(match[7])
+  const evalCol = Number(match[8])
+  const file = match[9]
+  const lnum = match[10]
+  const col = match[11]
+  const native = match[12] === 'native'
 
   const res = {}
 
@@ -277,6 +281,10 @@ StackUtils.prototype.parseLine = function parseLine (line) {
 
   if (meth && fname !== meth) {
     res.method = meth
+  }
+
+  if (symbolFname) {
+    res.function = symbolFname
   }
 
   return res
