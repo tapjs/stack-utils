@@ -1,3 +1,5 @@
+var nodeInternals = require('stack-utils-node-internals');
+
 module.exports = StackUtils;
 
 function StackUtils(opts) {
@@ -10,21 +12,8 @@ function StackUtils(opts) {
   this._wrapCallSite = opts.wrapCallSite || false;
 }
 
+module.exports.natives = nodeInternals.natives;
 module.exports.nodeInternals = nodeInternals;
-
-function nodeInternals() {
-  if (!module.exports.natives) {
-    module.exports.natives = Object.keys(process.binding('natives'));
-    module.exports.natives.push('bootstrap_node', 'node');
-  }
-
-  return module.exports.natives.map(function (n) {
-    return new RegExp('\\(' + n + '\\.js:\\d+:\\d+\\)$');
-  }).concat([
-    /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
-    /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
-  ]);
-}
 
 StackUtils.prototype.clean = function (stack) {
   if (!Array.isArray(stack)) {

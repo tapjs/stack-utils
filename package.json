@@ -21,7 +21,9 @@
   "keywords": [
     ""
   ],
-  "dependencies": {},
+  "dependencies": {
+    "stack-utils-node-internals": "^1.0.0"
+  },
   "devDependencies": {
     "bluebird": "^3.1.1",
     "coveralls": "^2.11.6",
