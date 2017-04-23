@@ -1,0 +1,237 @@
+{
+  "    at Object.[foo] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.[foo]"
+  },
+  "    at Object.<anonymous> (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.<anonymous>"
+  },
+  "    at Module._compile (module.js:571:32)": {
+    "line": 571,
+    "column": 32,
+    "file": "module.js",
+    "function": "Module._compile"
+  },
+  "    at Object.Module._extensions..js (module.js:580:10)": {
+    "line": 580,
+    "column": 10,
+    "file": "module.js",
+    "function": "Object.Module._extensions..js"
+  },
+  "    at Module.load (module.js:488:32)": {
+    "line": 488,
+    "column": 32,
+    "file": "module.js",
+    "function": "Module.load"
+  },
+  "    at tryModuleLoad (module.js:447:12)": {
+    "line": 447,
+    "column": 12,
+    "file": "module.js",
+    "function": "tryModuleLoad"
+  },
+  "    at Function.Module._load (module.js:439:3)": {
+    "line": 439,
+    "column": 3,
+    "file": "module.js",
+    "function": "Function.Module._load"
+  },
+  "    at Module.runMain (module.js:605:10)": {
+    "line": 605,
+    "column": 10,
+    "file": "module.js",
+    "function": "Module.runMain"
+  },
+  "    at run (bootstrap_node.js:418:7)": {
+    "line": 418,
+    "column": 7,
+    "file": "bootstrap_node.js",
+    "function": "run"
+  },
+  "    at startup (bootstrap_node.js:139:9)": {
+    "line": 139,
+    "column": 9,
+    "file": "bootstrap_node.js",
+    "function": "startup"
+  },
+  "    at Object.asdf ][)( \u0000\u0001\u0002\u0003\u001b[44;37m foo (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.asdf ][)( \u0000\u0001\u0002\u0003\u001b[44;37m foo"
+  },
+  "    at Object.asdf (__dirname/generate-parse-fixture.js:420:69) (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.asdf (__dirname/generate-parse-fixture.js:420:69)"
+  },
+  "    at Object.eval (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.eval"
+  },
+  "    at eval (eval at <anonymous> (__dirname/generate-parse-fixture.js:420:69), <anonymous>:1:5)": {
+    "line": 1,
+    "column": 5,
+    "file": "<anonymous>",
+    "evalOrigin": "<anonymous>",
+    "evalLine": 420,
+    "evalColumn": 69,
+    "evalFile": "__dirname/generate-parse-fixture.js",
+    "function": "eval"
+  },
+  "    at Object.a (s) d [f] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.a (s) d [f]"
+  },
+  "    at eval (eval at fooeval (a file with eval .js:1:23), <anonymous>:1:5)": {
+    "line": 1,
+    "column": 5,
+    "file": "<anonymous>",
+    "evalOrigin": "fooeval",
+    "evalLine": 1,
+    "evalColumn": 23,
+    "evalFile": "a file with eval .js",
+    "function": "eval"
+  },
+  "    at fooeval (a file with eval .js:1:23)": {
+    "line": 1,
+    "column": 23,
+    "file": "a file with eval .js",
+    "function": "fooeval"
+  },
+  "    at a file with eval .js:1:41": {
+    "line": 1,
+    "column": 41,
+    "file": "a file with eval .js"
+  },
+  "    at ContextifyScript.Script.runInContext (vm.js:32:29)": {
+    "line": 32,
+    "column": 29,
+    "file": "vm.js",
+    "function": "ContextifyScript.Script.runInContext"
+  },
+  "    at ContextifyScript.Script.runInNewContext (vm.js:38:15)": {
+    "line": 38,
+    "column": 15,
+    "file": "vm.js",
+    "function": "ContextifyScript.Script.runInNewContext"
+  },
+  "    at Object.exports.runInNewContext (vm.js:69:17)": {
+    "line": 69,
+    "column": 17,
+    "file": "vm.js",
+    "function": "Object.exports.runInNewContext"
+  },
+  "    at eval (eval at <anonymous> (a file with eval .js:1:1), <anonymous>:1:5)": {
+    "line": 1,
+    "column": 5,
+    "file": "<anonymous>",
+    "evalOrigin": "<anonymous>",
+    "evalLine": 1,
+    "evalColumn": 1,
+    "evalFile": "a file with eval .js",
+    "function": "eval"
+  },
+  "    at a file with eval .js:1:1": {
+    "line": 1,
+    "column": 1,
+    "file": "a file with eval .js"
+  },
+  "    at Object.function ctor (file.js:1:2)     <anonymous> (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.function ctor (file.js:1:2)     <anonymous>"
+  },
+  "    at eval (eval at <anonymous> (__dirname/generate-parse-fixture.js:420:69), <anonymous>:3:5)": {
+    "line": 3,
+    "column": 5,
+    "file": "<anonymous>",
+    "evalOrigin": "<anonymous>",
+    "evalLine": 420,
+    "evalColumn": 69,
+    "evalFile": "__dirname/generate-parse-fixture.js",
+    "function": "eval"
+  },
+  "    at Object.[Symbol.iterator] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.[Symbol.iterator]"
+  },
+  "    at Classy.[Symbol.iterator] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Classy.[Symbol.iterator]"
+  },
+  "    at [some (weird) [<symbolism>]] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "[some (weird) [<symbolism>]]"
+  },
+  "    at Object.[some (weird) [<symbolism>]] [as foo] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.[some (weird) [<symbolism>]]",
+    "method": "foo"
+  },
+  "    at OtherClass.[some (weird) [<symbolism>]] [as foo] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "OtherClass.[some (weird) [<symbolism>]]",
+    "method": "foo"
+  },
+  "    at Object.a (w) [<s>] (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "Object.a (w) [<s>]"
+  },
+  "    at evalmachine.<anonymous>:1:17": {
+    "line": 1,
+    "column": 17,
+    "file": "evalmachine.<anonymous>"
+  },
+  "    at x (     f[i](l<e>:.js:1:2)    :1:33)": {
+    "line": 1,
+    "column": 33,
+    "file": "     f[i](l<e>:.js:1:2)    ",
+    "function": "x"
+  },
+  "    at      f[i](l<e>:.js:1:2)    :2:1": {
+    "line": 2,
+    "column": 1,
+    "file": "     f[i](l<e>:.js:1:2)    "
+  },
+  "    at new Foo (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "constructor": true,
+    "function": "Foo"
+  },
+  "    at arr.map.n (__dirname/generate-parse-fixture.js:420:69)": {
+    "line": 420,
+    "column": 69,
+    "file": "__dirname/generate-parse-fixture.js",
+    "function": "arr.map.n"
+  },
+  "    at Array.map (native)": {
+    "native": true,
+    "function": "Array.map"
+  }
+}
