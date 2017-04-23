@@ -210,24 +210,27 @@ var re = new RegExp(
   '(?:\\s*at )?' +
     // $1 = ctor if 'new'
   '(?:(new) )?' +
-    // Object.method [as foo] (, maybe
-    // $2 = function name
-    // $3 = method name
-  '(?:([^\\(\\[]*)(?: \\[as ([^\\]]+)\\])? \\()?' +
-    // Object.[Symbol.…] (, maybe
-    // $4 = function name
-  '(?:([^\\(\\[]+\\[Symbol\\..+?\\]) \\()?' +
+    // $2 = function name (can be literally anything)
+    // May contain method at the end as [as xyz]
+  '(?:(.*?) \\()?' +
     // (eval at <anonymous> (file.js:1:1),
-    // $5 = eval origin
-    // $6:$7:$8 are eval file/line/col, but not normally reported
+    // $3 = eval origin
+    // $4:$5:$6 are eval file/line/col, but not normally reported
   '(?:eval at ([^ ]+) \\((.+?):(\\d+):(\\d+)\\), )?' +
     // file:line:col
-    // $9:$10:$11
-    // $12 = 'native' if native
+    // $7:$8:$9
+    // $10 = 'native' if native
   '(?:(.+?):(\\d+):(\\d+)|(native))' +
     // maybe close the paren, then end
-  '\\)?$'
+    // if $11 is ), then we only allow balanced parens in the filename
+    // any imbalance is placed on the fname.  This is a heuristic, and
+    // bound to be incorrect in some edge cases.  The bet is that
+    // having weird characters in method names is more common than
+    // having weird characters in filenames, which seems reasonable.
+  '(\\)?)$'
 );
+
+var methodRe = /^(.*?) \[as (.*?)\]$/;
 
 StackUtils.prototype.parseLine = function parseLine(line) {
   var match = line && line.match(re);
@@ -237,16 +240,15 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 
   var ctor = match[1] === 'new';
   var fname = match[2];
-  var meth = match[3];
-  var symbolFname = match[4];
-  var evalOrigin = match[5];
-  var evalFile = match[6];
-  var evalLine = Number(match[7]);
-  var evalCol = Number(match[8]);
-  var file = match[9];
-  var lnum = match[10];
-  var col = match[11];
-  var native = match[12] === 'native';
+  var evalOrigin = match[3];
+  var evalFile = match[4];
+  var evalLine = Number(match[5]);
+  var evalCol = Number(match[6]);
+  var file = match[7];
+  var lnum = match[8];
+  var col = match[9];
+  var native = match[10] === 'native';
+  var closeParen = match[11] === ')';
 
   var res = {};
 
@@ -256,6 +258,37 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 
   if (col) {
     res.column = Number(col);
+  }
+
+  if (closeParen && file) {
+    // make sure parens are balanced
+    // if we have a file like "asdf) [as foo] (xyz.js", then odds are
+    // that the fname should be += " (asdf) [as foo]" and the file
+    // should be just "xyz.js"
+    // walk backwards from the end to find the last unbalanced (
+    var closes = 0;
+    for (var i = file.length - 1; i > 0; i--) {
+      if (file.charAt(i) === ')') {
+        closes ++;
+      } else if (file.charAt(i) === '(' && file.charAt(i - 1) === ' ') {
+        closes --;
+        if (closes === -1 && file.charAt(i - 1) === ' ') {
+          var before = file.substr(0, i - 1);
+          var after = file.substr(i + 1);
+          file = after;
+          fname += ' (' + before;
+          break;
+        }
+      }
+    }
+  }
+
+  if (fname) {
+    var methodMatch = fname.match(methodRe);
+    if (methodMatch) {
+      fname = methodMatch[1];
+      var meth = methodMatch[2];
+    }
   }
 
   this._setFile(res, file);
@@ -281,10 +314,6 @@ StackUtils.prototype.parseLine = function parseLine(line) {
 
   if (meth && fname !== meth) {
     res.method = meth;
-  }
-
-  if (symbolFname) {
-    res.function = symbolFname;
   }
 
   return res;
