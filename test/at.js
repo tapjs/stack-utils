@@ -14,9 +14,9 @@ var arr = [ 0 ]
 var captures = arr.map(function xyz (n) {
   return stack.at(xyz)
 })
-t.same(captures, [ {
-  line: 1,
-  column: 1,
+t.match(captures, [ {
+  line: Number,
+  column: Number,
   file: 'native array.js',
   native: true,
   type: 'Array',
