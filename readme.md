@@ -106,7 +106,7 @@ The available properties are:
  - `constructor`: `boolean`
  - `evalOrigin`: `string`
  - `native`: `boolean`
- - `typename`: `string`
+ - `type`: `string`
  - `function`: `string`
  - `method`: `string`
 
