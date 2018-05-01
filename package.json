@@ -1,6 +1,6 @@
 {
   "name": "stack-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Captures and cleans stack traces",
   "license": "MIT",
   "repository": "tapjs/stack-utils",
@@ -26,12 +26,12 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "bluebird": "^3.1.1",
+    "bluebird": "^3.5.1",
     "coveralls": "^2.11.6",
     "flatten": "0.0.1",
     "nested-error-stacks": "^2.0.0",
     "pify": "^2.3.0",
     "q": "^1.4.1",
-    "tap": "^10.3.2"
+    "tap": "^11.1.4"
   }
 }
