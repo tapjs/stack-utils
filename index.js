@@ -197,8 +197,7 @@ StackUtils.prototype.at = function at(fn) {
 
 StackUtils.prototype._setFile = function (result, filename) {
   if (filename) {
-    filename = filename.replace(/\\/g, '/');
-    if ((filename.indexOf(this._cwd + '/') === 0)) {
+    if ((filename.indexOf(this._cwd + require('path').sep) === 0)) {
       filename = filename.substr(this._cwd.length + 1);
     }
     result.file = filename;
