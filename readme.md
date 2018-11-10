@@ -39,7 +39,7 @@ Creates a new `stackUtils` instance.
 Type: `array` of `RegularExpression`s  
 
 A set of regular expressions that match internal stack stack trace lines which should be culled from the stack trace.
-`StackUtils.nodeInternals()` returns a relatively set of sensible defaults for use on the node platform.
+`StackUtils.nodeInternals()` returns a set of relatively sensible defaults for use on the node platform.
 
 ##### cwd
 
