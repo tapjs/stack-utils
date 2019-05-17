@@ -46,6 +46,9 @@ StackUtils.prototype.clean = function (stack) {
   stack.forEach(function (st) {
     st = st.replace(/\\/g, '/');
     var isInternal = this._internals.some(function (internal) {
+      if (typeof internal === 'string' || internal instanceof String) {
+          internal = new RegExp(internal.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+      }
       return internal.test(st);
     });
 
