@@ -6,7 +6,7 @@ var t = require('tap')
 var stack = new StackUtils()
 
 // a capture with no function, not much to it, actually
-var base = __filename.substr(process.cwd().length + 1)
+var base = __filename.substr(process.cwd().length + 1).replace(/\\/g, '/')
 t.match(stack.at(), { line: Number, column: Number, file: base })
 
 // a capture from a native site
