@@ -15,7 +15,11 @@ module.exports.nodeInternals = nodeInternals;
 
 function nodeInternals() {
   if (!module.exports.natives) {
-    module.exports.natives = Object.keys(process.binding('natives'));
+    var officialList = require('module').builtinModules;
+    /* istanbul ignore next: only one branch is reachable per run */
+    module.exports.natives = officialList ?
+      Array.from(officialList) :
+      Object.keys(process.binding('natives'));
     module.exports.natives.push('bootstrap_node', 'node',
                                 'internal/bootstrap/node');
   }
