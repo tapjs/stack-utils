@@ -10,10 +10,10 @@
     "url": "github.com/jamestalmage"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=10"
   },
   "scripts": {
-    "test": "tap test/*.js --100 -J",
+    "test": "tap --no-esm --100",
     "preversion": "npm test",
     "postversion": "npm publish",
     "postpublish": "git push origin --all; git push origin --tags"
@@ -21,17 +21,12 @@
   "files": [
     "index.js"
   ],
-  "keywords": [
-    ""
-  ],
-  "dependencies": {},
   "devDependencies": {
-    "bluebird": "^3.1.1",
-    "coveralls": "^2.11.6",
-    "flatten": "0.0.1",
-    "nested-error-stacks": "^2.0.0",
-    "pify": "^2.3.0",
-    "q": "^1.4.1",
-    "tap": "^10.3.2"
+    "bluebird": "^3.7.2",
+    "coveralls": "^3.0.9",
+    "nested-error-stacks": "^2.1.0",
+    "pify": "^4.0.1",
+    "q": "^1.5.1",
+    "tap": "=14.10.2-unbundled"
   }
 }

@@ -1,11 +1,12 @@
-var t = require('tap');
-var StackUtils = require('../');
-var longStackTraces = require('./fixtures/long-stack-traces');
-var pify = require('pify');
-var Promise = require('bluebird');
-var nestedErrors = pify(require('./fixtures/nested-errors'), Promise);
+'use strict';
 
-var utils = require('./_utils');
+const t = require('tap');
+const StackUtils = require('../');
+const longStackTraces = require('./fixtures/long-stack-traces');
+const pify = require('pify');
+const nestedErrors = pify(require('./fixtures/nested-errors'), require('bluebird'));
+
+const utils = require('./_utils');
 
 function internals() {
   return StackUtils.nodeInternals().concat([
@@ -16,13 +17,13 @@ function internals() {
   ]);
 }
 
-var stackUtils = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
+const stackUtils = new StackUtils({internals: internals(), cwd: utils.fixtureDir});
 
-t.test('indents lines after first "From previous event:"', function (t) {
+t.test('indents lines after first "From previous event:"', t => {
   return longStackTraces.bluebird
-    .then(function (stack) {
-      var cleanedStack = stackUtils.clean(stack);
-      var expected = utils.join([
+    .then(stack => {
+      const cleanedStack = stackUtils.clean(stack);
+      const expected = utils.join([
         'mostInner (produce-long-stack-traces.js:10:5)',
         'From previous event:',
         '    evenMoreInner (produce-long-stack-traces.js:9:29)',
@@ -38,12 +39,12 @@ t.test('indents lines after first "From previous event:"', function (t) {
     });
 });
 
-t.test('removes empty "From previous event:" sections from the bottom', function (t) {
+t.test('removes empty "From previous event:" sections from the bottom', t => {
   return longStackTraces.bluebird.bottom
-    .then(function (stack) {
-      var cleanedStack = stackUtils.clean(stack);
+    .then(stack => {
+      const cleanedStack = stackUtils.clean(stack);
 
-      var expected = utils.join([
+      const expected = utils.join([
         'mostInner (produce-long-stack-traces.js:43:6)',
         'From previous event:',
         '    evenMoreInner (produce-long-stack-traces.js:42:30)',
@@ -57,12 +58,12 @@ t.test('removes empty "From previous event:" sections from the bottom', function
     });
 });
 
-t.test('removes empty "From previous event:" sections from the top', function (t) {
+t.test('removes empty "From previous event:" sections from the top', t => {
   return longStackTraces.bluebird.top
-    then(function (stack) {
-      var cleanedStack = stackUtils.clean(stack);
+    .then(stack => {
+      const cleanedStack = stackUtils.clean(stack);
 
-      var expected = utils.join([
+      const expected = utils.join([
         'From previous event:',
         '    evenMoreInner (produce-long-stack-traces.js:33:29)',
         'From previous event:',
@@ -77,12 +78,12 @@ t.test('removes empty "From previous event:" sections from the top', function (t
     });
 });
 
-t.test('removes empty "From previous event:" sections from the middle', function (t) {
+t.test('removes empty "From previous event:" sections from the middle', t => {
   return longStackTraces.bluebird.middle
-    then(function (stack) {
-      var cleanedStack = stackUtils.clean(stack);
+    .then(stack => {
+      const cleanedStack = stackUtils.clean(stack);
 
-      var expected = utils.join([
+      const expected = utils.join([
         'mostInner (produce-long-stack-traces.js:22:5)',
         'From previous event:',
         '    evenMoreInner (produce-long-stack-traces.js:21:29)',
@@ -98,11 +99,11 @@ t.test('removes empty "From previous event:" sections from the middle', function
     });
 });
 
-t.test('removes empty "Caused by:" sections from the top', function (t) {
-  nestedErrors.top(function (stack) {
-    var cleanedStack = stackUtils.clean(stack);
+t.test('removes empty "Caused by:" sections from the top', t => {
+  nestedErrors.top(stack => {
+    const cleanedStack = stackUtils.clean(stack);
 
-    var expected = utils.join([
+    const expected = utils.join([
       'Caused By: Error: baz',
       '    Object.module.exports.top (nested-errors.js:36:5)'
     ]);
@@ -112,11 +113,11 @@ t.test('removes empty "Caused by:" sections from the top', function (t) {
   });
 });
 
-t.test('removes empty "Caused by:" sections from the bottom', function (t) {
-  nestedErrors.bottom(function (stack) {
-    var cleanedStack = stackUtils.clean(stack);
+t.test('removes empty "Caused by:" sections from the bottom', t => {
+  nestedErrors.bottom(stack => {
+    const cleanedStack = stackUtils.clean(stack);
 
-    var expected = utils.join([
+    const expected = utils.join([
       'nested (nested-errors.js:9:6)',
       'moreNested (nested-errors.js:15:3)',
       'Caused By: BarError: bar: internal',
@@ -128,11 +129,11 @@ t.test('removes empty "Caused by:" sections from the bottom', function (t) {
   });
 });
 
-t.test('removes empty "Caused by:" sections from the middle', function (t) {
-  nestedErrors.middle(function (stack) {
-    var cleanedStack = stackUtils.clean(stack);
+t.test('removes empty "Caused by:" sections from the middle', t => {
+  nestedErrors.middle(stack => {
+    const cleanedStack = stackUtils.clean(stack);
 
-    var expected = utils.join([
+    const expected = utils.join([
       'nested-errors.js:41:6',
       'Caused By: Error: bar',
       '    Object.module.exports.middle (nested-errors.js:42:5)'

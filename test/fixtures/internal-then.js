@@ -1,5 +1,4 @@
-
-//var p = global.InternalPromise.resolve().then(function () {});
+'use strict';
 
 module.exports = function internalLibraryOuterFn(then) {
 	return global.InternalPromise.resolve().then(function internalLibraryInnerFn() {
@@ -14,4 +13,3 @@ module.exports.reject = function internalLibraryOuterReject() {
 		});
 	});
 };
-

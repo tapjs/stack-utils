@@ -1,18 +1,18 @@
 'use strict';
 
-var NestedError = require('nested-error-stacks');
-var util = require('util');
-var internal = require('./internal-error');
+const NestedError = require('nested-error-stacks');
+const util = require('util');
+const internal = require('./internal-error');
 
 function foo(cb) {
 	bar(function nested(err) {
-		cb(new FooError('foo' + err.message, err));
+		cb(new FooError(`foo${err.message}`, err));
 	});
 }
 
 function bar(cb) {
 	internal(function moreNested(err) {
-		cb(new BarError('bar: ' + err.message, err));
+		cb(new BarError(`bar: ${err.message}`, err));
 	});
 }
 
@@ -43,7 +43,7 @@ module.exports.middle = function (cb) {
 };
 
 module.exports.bottom = function (cb) {
-	foo(function (err){
+	foo(function (err) {
 		cb(err.stack);
 	});
 };
