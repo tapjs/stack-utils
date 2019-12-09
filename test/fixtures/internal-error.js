@@ -1,6 +1,6 @@
 'use strict';
-var NestedError = require('nested-error-stacks');
-var util = require('util');
+const NestedError = require('nested-error-stacks');
+const util = require('util');
 
 function InternalError(message, nested) {
 	NestedError.call(this, message, nested);

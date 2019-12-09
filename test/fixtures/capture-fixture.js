@@ -1,62 +1,50 @@
 'use strict';
-module.exports = CaptureFixture;
 
-function CaptureFixture(stack) {
-	this.stack = stack;
+class CaptureFixture {
+  constructor (stack) {
+    this.stack = stack;
+  }
+
+  redirect1 (method, ...args) {
+    return this[method](...args);
+  }
+
+  redirect2 (method, ...args) {
+    return this[method](...args);
+  }
+
+  const (method, ...args) {
+    const self = this;
+    class Constructor {
+      constructor () {
+        this.val = self[method](...args);
+      }
+    }
+
+    return new Constructor().val;
+  }
+
+  obj (methodName, method, ...args) {
+    const obj = {
+      [methodName]: () => this[method](...args)
+    };
+
+    return obj[methodName]();
+  }
+
+  eval (method, ...args) {
+    const self = this;
+
+    return eval('self[method](...args)');
+  }
+
+  error (message) {
+    return new Error(message);
+  }
 }
 
-CaptureFixture.prototype.redirect1 = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	return this[method].apply(this, args);
+CaptureFixture.prototype.call = function (method, ...args) {
+  return this.stack[method](...args);
 };
 
-CaptureFixture.prototype.redirect2 = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	return this[method].apply(this, args);
-};
-
-CaptureFixture.prototype.call = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	return this.stack[method].apply(this.stack, args);
-};
-
-CaptureFixture.prototype.const = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	var self = this;
-
-	function Constructor() {
-		this.val = self[method].apply(self, args);
-	}
-
-	return new Constructor().val;
-};
-
-CaptureFixture.prototype.obj = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var methodName = args.shift();
-	var method = args.shift();
-	var self = this;
-
-	var obj = {};
-	obj[methodName] = function () {
-		return self[method].apply(self, args);
-	};
-
-	return obj[methodName]();
-};
-
-CaptureFixture.prototype.eval = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var method = args.shift();
-	var self = this;
-
-	return eval('self[method].apply(self, args)');
-};
-
-CaptureFixture.prototype.error = function (message) {
-	return new Error(message);
-};
+module.exports = CaptureFixture;
