@@ -1,5 +1,20 @@
 'use strict';
 
+const natives = [].concat(
+  require('module').builtinModules,
+  'bootstrap_node',
+  'node',
+  'internal/bootstrap/node'
+).map(n => new RegExp(`\\(${n}\\.js:\\d+:\\d+\\)$`));
+
+natives.push(
+  // XXX are `bootstrap_node.js` and `node.js` needed in supported versions?
+  /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
+  /\(internal\/[^:]+:\d+:\d+\)$/,
+  /\s*at internal[/]main[/]run_main_module\.js:\d+:\d+$/,
+  /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
+);
+
 class StackUtils {
   constructor (opts = {}) {
     this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/');
@@ -8,22 +23,7 @@ class StackUtils {
   }
 
   static nodeInternals () {
-    if (!module.exports.natives) {
-      module.exports.natives = [].concat(
-        require('module').builtinModules,
-        'bootstrap_node',
-        'node',
-        'internal/bootstrap/node'
-      );
-    }
-
-    return module.exports.natives
-      .map(n => new RegExp(`\\(${n}\\.js:\\d+:\\d+\\)$`))
-      .concat([
-        /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
-        /\(internal\/[^:]+:\d+:\d+\)$/,
-        /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
-      ]);
+    return [...natives];
   }
 
   clean (stack) {
