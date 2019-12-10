@@ -1,5 +1,7 @@
 'use strict';
 
+const escapeStringRegexp = require('escape-string-regexp');
+
 const natives = [].concat(
   require('module').builtinModules,
   'bootstrap_node',
@@ -33,8 +35,7 @@ class StackUtils {
     this._cwd = opts.cwd.replace(/\\/g, '/');
     this._internals = [].concat(
       opts.internals,
-      opts.ignoredPackages.length === 0 ? [] :
-        new RegExp(`[\/\\\\]node_modules[\/\\\\](?:${opts.ignoredPackages.join('|')})[\/\\\\][^:]+:\\d+:\\d+`)
+      ignoredPackagesRegExp(opts.ignoredPackages)
     );
 
     this._wrapCallSite = opts.wrapCallSite || false;
@@ -297,6 +298,16 @@ function setFile (result, filename, cwd) {
 
     result.file = filename;
   }
+}
+
+function ignoredPackagesRegExp(ignoredPackages) {
+  if (ignoredPackages.length === 0) {
+    return [];
+  }
+
+  const packages = ignoredPackages.map(mod => escapeStringRegexp(mod));
+
+  return new RegExp(`[\/\\\\]node_modules[\/\\\\](?:${packages.join('|')})[\/\\\\][^:]+:\\d+:\\d+`)
 }
 
 const re = new RegExp(

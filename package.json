@@ -21,8 +21,10 @@
   "files": [
     "index.js"
   ],
+  "dependencies": {
+    "escape-string-regexp": "^2.0.0"
+  },
   "devDependencies": {
-    "arg": "^4.1.2",
     "bluebird": "^3.7.2",
     "coveralls": "^3.0.9",
     "nested-error-stacks": "^2.1.0",
