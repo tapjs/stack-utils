@@ -16,9 +16,27 @@ natives.push(
 );
 
 class StackUtils {
-  constructor (opts = {}) {
-    this._cwd = (opts.cwd || process.cwd()).replace(/\\/g, '/');
-    this._internals = opts.internals || [];
+  constructor (opts) {
+    opts = {
+      ignoredPackages: [],
+      ...opts
+    };
+
+    if ('internals' in opts === false) {
+      opts.internals = StackUtils.nodeInternals();
+    }
+
+    if ('cwd' in opts === false) {
+      opts.cwd = process.cwd()
+    }
+
+    this._cwd = opts.cwd.replace(/\\/g, '/');
+    this._internals = [].concat(
+      opts.internals,
+      opts.ignoredPackages.length === 0 ? [] :
+        new RegExp(`[\/\\\\]node_modules[\/\\\\](?:${opts.ignoredPackages.join('|')})[\/\\\\][^:]+:\\d+:\\d+`)
+    );
+
     this._wrapCallSite = opts.wrapCallSite || false;
   }
 

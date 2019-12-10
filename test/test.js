@@ -134,12 +134,12 @@ t.test('clean: truncates cwd', t => {
     'startup (node.js:141:18)'
   ]);
 
-  let stack = new StackUtils({cwd: '/user/dev/project'});
+  let stack = new StackUtils({cwd: '/user/dev/project', internals: []});
   t.is(stack.clean(LinuxStack1), expected, 'accepts a linux string');
   t.is(stack.clean(LinuxStack1.split('\n')), expected, 'accepts an array');
   t.is(stack.clean(LinuxStack1.split('\n').slice(1)), expected, 'slices off the message line');
 
-  stack = new StackUtils({cwd: 'Z:\\user\\dev\\project'});
+  stack = new StackUtils({cwd: 'Z:\\user\\dev\\project', internals: []});
   t.is(stack.clean(WindowsStack1), expected, 'accepts a windows string');
   t.end();
 });

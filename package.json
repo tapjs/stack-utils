@@ -22,6 +22,7 @@
     "index.js"
   ],
   "devDependencies": {
+    "arg": "^4.1.2",
     "bluebird": "^3.7.2",
     "coveralls": "^3.0.9",
     "nested-error-stacks": "^2.1.0",
