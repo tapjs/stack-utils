@@ -39,7 +39,17 @@ Creates a new `stackUtils` instance.
 Type: `array` of `RegularExpression`s  
 
 A set of regular expressions that match internal stack stack trace lines which should be culled from the stack trace.
-`StackUtils.nodeInternals()` returns a set of relatively sensible defaults for use on the node platform.
+The default is `StackUtils.nodeInternals()`, this can be disabled by setting `[]` or appended using
+`StackUtils.nodeInternals().concat(additionalRegExp)`.  See also `ignoredPackages`.
+
+##### ignoredPackages
+
+Type: `array` of `string`s
+
+An array of npm modules to be culled from the stack trace.  This list will mapped to regular
+expressions and merged with the `internals`.
+
+Default `''`.
 
 ##### cwd
 
