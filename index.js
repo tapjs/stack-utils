@@ -328,11 +328,3 @@ const re = new RegExp(
 const methodRe = /^(.*?) \[as (.*?)\]$/;
 
 module.exports = StackUtils;
-
-const bound = new StackUtils();
-
-Object.getOwnPropertyNames(StackUtils.prototype).forEach(key => {
-  if (key !== 'constructor') {
-    StackUtils[key] = bound[key].bind(bound);
-  }
-});

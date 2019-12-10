@@ -6,99 +6,6 @@ const StackUtils = require('../');
 const CaptureFixture = require('./fixtures/capture-fixture');
 const utils = require('./_utils');
 
-// Use a fixed known set of native modules, since this changes
-// depending on the version of Node we're testing with.
-StackUtils.natives = [
-  'internal/bootstrap_node',
-  '_debug_agent',
-  '_debugger',
-  'assert',
-  'async_hooks',
-  'buffer',
-  'child_process',
-  'console',
-  'constants',
-  'crypto',
-  'cluster',
-  'dgram',
-  'dns',
-  'domain',
-  'events',
-  'fs',
-  'http',
-  '_http_agent',
-  '_http_client',
-  '_http_common',
-  '_http_incoming',
-  '_http_outgoing',
-  '_http_server',
-  'https',
-  '_linklist',
-  'module',
-  'net',
-  'os',
-  'path',
-  'process',
-  'punycode',
-  'querystring',
-  'readline',
-  'repl',
-  'stream',
-  '_stream_readable',
-  '_stream_writable',
-  '_stream_duplex',
-  '_stream_transform',
-  '_stream_passthrough',
-  '_stream_wrap',
-  'string_decoder',
-  'sys',
-  'timers',
-  'tls',
-  '_tls_common',
-  '_tls_legacy',
-  '_tls_wrap',
-  'tty',
-  'url',
-  'util',
-  'v8',
-  'vm',
-  'zlib',
-  'internal/buffer',
-  'internal/child_process',
-  'internal/cluster',
-  'internal/freelist',
-  'internal/fs',
-  'internal/linkedlist',
-  'internal/net',
-  'internal/module',
-  'internal/process/next_tick',
-  'internal/process/promises',
-  'internal/process/stdio',
-  'internal/process/warning',
-  'internal/process',
-  'internal/readline',
-  'internal/repl',
-  'internal/socket_list',
-  'internal/url',
-  'internal/util',
-  'internal/v8_prof_polyfill',
-  'internal/v8_prof_processor',
-  'internal/streams/lazy_transform',
-  'internal/streams/BufferList',
-  'v8/tools/splaytree',
-  'v8/tools/codemap',
-  'v8/tools/consarray',
-  'v8/tools/csvparser',
-  'v8/tools/profile',
-  'v8/tools/profile_view',
-  'v8/tools/logreader',
-  'v8/tools/tickprocessor',
-  'v8/tools/SourceMap',
-  'v8/tools/tickprocessor-driver',
-  'bootstrap_node',
-  'node'
-];
-
 const LinuxStack1 = utils.join(linuxStack1(), internalStack());
 const WindowsStack1 = utils.join(windowsStack1(), internalStack());
 
@@ -145,7 +52,7 @@ t.test('clean: truncates cwd', t => {
 });
 
 t.test('clean: eliminates internals', t => {
-  let stack = new StackUtils({cwd: '/user/dev', internals: StackUtils.nodeInternals()});
+  let stack = new StackUtils({cwd: '/user/dev'});
   const expected = utils.join([
     'foo (project/foo.js:3:8)',
     'bar (project/foo.js:7:2)',
@@ -154,13 +61,13 @@ t.test('clean: eliminates internals', t => {
   ]);
   t.is(stack.clean(LinuxStack1), expected);
 
-  stack = new StackUtils({cwd: 'Z:\\user\\dev', internals: StackUtils.nodeInternals()});
+  stack = new StackUtils({cwd: 'Z:\\user\\dev'});
   t.is(stack.clean(WindowsStack1), expected);
   t.end();
 });
 
 t.test('clean: returns null if it is all internals', t => {
-  const stack = new StackUtils({internals: StackUtils.nodeInternals()});
+  const stack = new StackUtils();
   t.is(stack.clean(utils.join(internalStack())), '');
   t.end();
 });
@@ -438,7 +345,8 @@ t.test('parseLine', t => {
 });
 
 t.test('parseLine: handles native errors', t => {
-  t.same(StackUtils.parseLine('    at Error (native)'), {
+  const stackUtils = new StackUtils();
+  t.same(stackUtils.parseLine('    at Error (native)'), {
     native: true,
     function: 'Error'
   });
@@ -447,7 +355,8 @@ t.test('parseLine: handles native errors', t => {
 
 t.test('parseLine: handles parens', t => {
   const line = '    at X.<anonymous> (/USER/Db (Person)/x/y.js:14:11)';
-  t.same(StackUtils.parseLine(line), {
+  const stackUtils = new StackUtils();
+  t.same(stackUtils.parseLine(line), {
     line: 14,
     column: 11,
     file: '/USER/Db (Person)/x/y.js',
