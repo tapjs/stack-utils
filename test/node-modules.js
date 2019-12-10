@@ -1,23 +1,25 @@
 'use strict';
 
 const t = require('tap');
-const arg = require('arg');
 
 const StackUtils = require('../');
 
-function clean(stack, ...ignoredPackages) {
+function helper(fromModule, ignoredPackages) {
   const stackUtil = new StackUtils({ignoredPackages});
 
-  return stackUtil.clean(stack);
+  const result = stackUtil.clean('Error: Simulated\n' +
+    `    at fn (/usr/src/stack-utils/node_modules/${fromModule}/index.js:1:1)\n`);
+  if (ignoredPackages.includes(fromModule)) {
+    t.notMatch(result, `node_modules/${fromModule}/`);
+  } else {
+    t.match(result, `node_modules/${fromModule}/`);
+  }
 }
 
-try {
-  // This is being used as an easy to test error being thrown by a node_module.
-  arg();
-} catch (e) {
-  t.match(clean(e.stack), 'node_modules/arg/');
-  t.notMatch(clean(e.stack, 'arg'), 'node_modules/arg/');
-  t.match(clean(e.stack, 'resolve-from'), 'node_modules/arg/');
-  t.notMatch(clean(e.stack, 'arg', 'resolve-from'), 'node_modules/arg/');
-  t.notMatch(clean(e.stack, 'resolve-from', 'arg'), 'node_modules/arg/');
+const modules = ['arg', 'resolve-from', '@scoped/module'];
+for (const mod of modules) {
+  helper(mod, []);
+  helper(mod, [mod]);
+  helper(mod, modules.filter(m => m !== mod));
+  helper(mod, modules);
 }
