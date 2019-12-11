@@ -69,11 +69,12 @@ A mapping function for manipulating CallSites before processing. The first argum
 Returns an array of regular expressions that be used to cull lines from the stack trace that reference common Node.js internal files.
 
 
-### stackUtils.clean(stack)
+### stackUtils.clean(stack, indent = 0)
 
 Cleans up a stack trace by deleting any lines that match the `internals` passed to the constructor, and shortening file names relative to `cwd`.
 
 Returns a `string` with the cleaned up stack (always terminated with a `\n` newline character).
+Spaces at the start of each line are trimmed, indentation can be added by setting `indent` to the desired number of spaces.
 
 #### stack
 

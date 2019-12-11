@@ -19,7 +19,7 @@ t.test('must be called with new', t => {
 });
 
 t.test('clean: truncates cwd', t => {
-  const expected = utils.join([
+  const expectedArray = [
     'foo (foo.js:3:8)',
     'bar (foo.js:7:2)',
     'bar (bar.js:4:2)',
@@ -39,7 +39,8 @@ t.test('clean: truncates cwd', t => {
     'startup (bootstrap_node.js:139:9)',
     'bootstrap_node.js:535:3',
     'startup (node.js:141:18)'
-  ]);
+  ];
+  const expected = utils.join(expectedArray);
 
   let stack = new StackUtils({cwd: '/user/dev/project', internals: []});
   t.is(stack.clean(LinuxStack1), expected, 'accepts a linux string');
@@ -48,6 +49,10 @@ t.test('clean: truncates cwd', t => {
 
   stack = new StackUtils({cwd: 'Z:\\user\\dev\\project', internals: []});
   t.is(stack.clean(WindowsStack1), expected, 'accepts a windows string');
+
+  const expectIndented = utils.join(expectedArray.map(a => '    ' + a));
+  t.is(stack.clean(WindowsStack1, 4), expectIndented, 'indentation');
+
   t.end();
 });
 
