@@ -45,7 +45,9 @@ class StackUtils {
     return [...natives];
   }
 
-  clean (stack) {
+  clean (stack, indent = 0) {
+    indent = ' '.repeat(indent);
+
     if (!Array.isArray(stack)) {
       stack = stack.split('\n');
     }
@@ -93,13 +95,7 @@ class StackUtils {
       }
     });
 
-    stack = result.join('\n').trim();
-
-    if (stack) {
-      return `${stack}\n`;
-    }
-
-    return '';
+    return result.map(line => `${indent}${line}\n`).join('');
   }
 
   captureString (limit, fn = this.captureString) {
