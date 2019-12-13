@@ -16,7 +16,7 @@
     "test": "tap --no-esm --100",
     "preversion": "npm test",
     "postversion": "npm publish",
-    "prepublish": "git push origin --follow-tags"
+    "prepublishOnly": "git push origin --follow-tags"
   },
   "files": [
     "index.js"
