@@ -35,6 +35,7 @@ t.test('clean: truncates cwd', t => {
     'Module.load (module.js:344:32)',
     'Function.Module._load (module.js:301:12)',
     'Function.Module.runMain (module.js:430:10)',
+    'module.js:430:10',
     'run (bootstrap_node.js:420:7)',
     'startup (bootstrap_node.js:139:9)',
     'bootstrap_node.js:535:3',
@@ -403,6 +404,7 @@ function internalStack() {
     '    at Module.load (module.js:344:32)',
     '    at Function.Module._load (module.js:301:12)',
     '    at Function.Module.runMain (module.js:430:10)',
+    '    at module.js:430:10',
     '    at run (bootstrap_node.js:420:7)',
     '    at startup (bootstrap_node.js:139:9)',
     '    at bootstrap_node.js:535:3',
@@ -412,7 +414,6 @@ function internalStack() {
 
 function internals() {
   return StackUtils.nodeInternals().concat([
-    /internal\/main\/run_main_module\.js/,
     /test\.js:\d+:\d+\)?$/,
     /\/node_modules\//
   ]);

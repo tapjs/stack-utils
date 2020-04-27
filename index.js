@@ -6,14 +6,11 @@ const natives = [].concat(
   require('module').builtinModules,
   'bootstrap_node',
   'node',
-  'internal/bootstrap/node'
-).map(n => new RegExp(`\\(${n}\\.js:\\d+:\\d+\\)$`));
+).map(n => new RegExp(`(?:\\(${n}\\.js:\\d+:\\d+\\)$|^\\s*at ${n}\\.js:\\d+:\\d+$)`));
 
 natives.push(
-  // XXX are `bootstrap_node.js` and `node.js` needed in supported versions?
-  /\s*at (bootstrap_)?node\.js:\d+:\d+?$/,
   /\(internal\/[^:]+:\d+:\d+\)$/,
-  /\s*at internal[/]main[/]run_main_module\.js:\d+:\d+$/,
+  /\s*at internal\/[^:]+:\d+:\d+$/,
   /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
 );
 
