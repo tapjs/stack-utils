@@ -6,11 +6,11 @@ const natives = [].concat(
   require('module').builtinModules,
   'bootstrap_node',
   'node',
-).map(n => new RegExp(`(?:\\(${n}\\.js:\\d+:\\d+\\)$|^\\s*at ${n}\\.js:\\d+:\\d+$)`));
+).map(n => new RegExp(`(?:\\((?:node:)?${n}(?:\\.js)?:\\d+:\\d+\\)$|^\\s*at (?:node:)?${n}(?:\\.js)?:\\d+:\\d+$)`));
 
 natives.push(
-  /\(internal\/[^:]+:\d+:\d+\)$/,
-  /\s*at internal\/[^:]+:\d+:\d+$/,
+  /\((?:node:)?internal\/[^:]+:\d+:\d+\)$/,
+  /\s*at (?:node:)?internal\/[^:]+:\d+:\d+$/,
   /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
 );
 
