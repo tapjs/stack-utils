@@ -1,5 +1,12 @@
 'use strict';
 
+/* istanbul ignore next - affordance for node v8 */
+if (!String.prototype.trimEnd) {
+  String.prototype.trimEnd = function () {
+    return this.replace(/[\n\r\s\t]+$/, '')
+  }
+}
+
 const escapeStringRegexp = require('escape-string-regexp');
 
 const natives = [].concat(
