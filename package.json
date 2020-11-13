@@ -30,6 +30,6 @@
     "nested-error-stacks": "^2.1.0",
     "pify": "^4.0.1",
     "q": "^1.5.1",
-    "tap": "=14.10.2-unbundled"
+    "tap": "^14.10.8"
   }
 }
