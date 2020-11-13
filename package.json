@@ -1,6 +1,9 @@
 {
   "name": "stack-utils",
-  "version": "2.0.3",
+  "version": "1.0.3",
+  "publishConfig": {
+    "tag": "v1-legacy"
+  },
   "description": "Captures and cleans stack traces",
   "license": "MIT",
   "repository": "tapjs/stack-utils",
@@ -10,7 +13,7 @@
     "url": "github.com/jamestalmage"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=8"
   },
   "scripts": {
     "test": "tap --no-esm --100",
