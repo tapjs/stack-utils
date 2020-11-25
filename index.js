@@ -12,7 +12,7 @@ const escapeStringRegexp = require('escape-string-regexp');
 const natives = [].concat(
   require('module').builtinModules,
   'bootstrap_node',
-  'node',
+  'node'
 ).map(n => new RegExp(`(?:\\((?:node:)?${n}(?:\\.js)?:\\d+:\\d+\\)$|^\\s*at (?:node:)?${n}(?:\\.js)?:\\d+:\\d+$)`));
 
 natives.push(
