@@ -12,7 +12,7 @@ const escapeStringRegexp = require('escape-string-regexp');
 const natives = [].concat(
   require('module').builtinModules,
   'bootstrap_node',
-  'node',
+  'node'
 ).map(n => new RegExp(`(?:\\((?:node:)?${n}(?:\\.js)?:\\d+:\\d+\\)$|^\\s*at (?:node:)?${n}(?:\\.js)?:\\d+:\\d+$)`));
 
 natives.push(
@@ -23,10 +23,9 @@ natives.push(
 
 class StackUtils {
   constructor (opts) {
-    opts = {
-      ignoredPackages: [],
-      ...opts
-    };
+    opts = Object.assign({}, {
+      ignoredPackages: []
+    }, opts);
 
     if ('internals' in opts === false) {
       opts.internals = StackUtils.nodeInternals();
@@ -46,7 +45,7 @@ class StackUtils {
   }
 
   static nodeInternals () {
-    return [...natives];
+    return natives.slice();
   }
 
   clean (stack, indent = 0) {
