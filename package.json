@@ -1,6 +1,6 @@
 {
   "name": "stack-utils",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publishConfig": {
     "tag": "v1-legacy"
   },
