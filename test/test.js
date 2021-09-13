@@ -18,6 +18,23 @@ t.test('must be called with new', t => {
   t.end();
 });
 
+t.test('ok if called without a process object', t => {
+  const proc = process
+  const cwd = proc.cwd()
+  t.teardown(() => global.process = proc)
+  global.process = null
+  const StackUtils = t.mock('../', {
+    // need a fresh copy of these because they also look at global process
+    'source-map-support': t.mock('source-map-support'),
+    'own-or-env': t.mock('own-or-env'),
+  })
+  const expected = `${cwd}/foo (foo.js:3:8)\n`
+  const raw = `    at ${expected}\n`
+  const stack = new StackUtils({ internals: [] })
+  t.equal(stack.clean(raw), expected, 'no cwd is stripped off')
+  t.end()
+})
+
 t.test('clean: truncates cwd', t => {
   const expectedArray = [
     'foo (foo.js:3:8)',
