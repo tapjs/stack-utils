@@ -35,7 +35,7 @@ t.test('indents lines after first "From previous event:"', t => {
         '    Object.<anonymous> (produce-long-stack-traces.js:6:36)'
       ]);
 
-      t.is(cleanedStack, expected);
+      t.equal(cleanedStack, expected);
     });
 });
 
@@ -54,7 +54,7 @@ t.test('removes empty "From previous event:" sections from the bottom', t => {
         '    outer (produce-long-stack-traces.js:40:28)'
       ]);
 
-      t.is(cleanedStack, expected);
+      t.equal(cleanedStack, expected);
     });
 });
 
@@ -74,7 +74,7 @@ t.test('removes empty "From previous event:" sections from the top', t => {
         '    Object.<anonymous> (produce-long-stack-traces.js:30:40)'
       ]);
 
-      t.is(cleanedStack, expected);
+      t.equal(cleanedStack, expected);
     });
 });
 
@@ -124,7 +124,7 @@ t.test('removes empty "Caused by:" sections from the bottom', t => {
       '    moreNested (nested-errors.js:15:6)'
     ]);
 
-    t.is(cleanedStack, expected);
+    t.equal(cleanedStack, expected);
     t.end();
   });
 });

@@ -38,5 +38,5 @@ t.test('removes namespaced internal modules', t => {
     'Object.<anonymous> (node_modules/append-transform/index.js:62:4)',
   ])
   t.plan(1);
-  t.is(stackUtils.clean(stack), expectedStack);
+  t.equal(stackUtils.clean(stack), expectedStack);
 });
