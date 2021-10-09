@@ -1,19 +1,23 @@
 {
-  "name": "stack-utils",
-  "version": "2.0.5",
+  "name": "@conartist6/stack-utils",
+  "version": "1.0.0",
   "description": "Captures and cleans stack traces",
   "license": "MIT",
-  "repository": "tapjs/stack-utils",
+  "repository": "conartist6/stack-utils",
+  "main": "lib/index.js",
+  "files": [
+    "lib/*"
+  ],
   "author": {
-    "name": "James Talmage",
-    "email": "james@talmage.io",
-    "url": "github.com/jamestalmage"
-  },
-  "engines": {
-    "node": ">=10"
+    "name": "Conrad Buck",
+    "email": "conartist6@gmail.com",
+    "url": "https://github.com/conartist6"
   },
   "scripts": {
-    "test": "tap",
+    "build": "run-s build:nearley build:js",
+    "build:js": "babel -d lib src",
+    "build:nearley": "cd src/v8/parse/internal/nearley && nearleyc error.ne -o error.js && nearleyc frame.ne -o frame.js && nearleyc frame-strict.ne -o frame-strict.js",
+    "test": "ava",
     "preversion": "npm test",
     "postversion": "npm publish",
     "prepublishOnly": "git push origin --follow-tags"
@@ -21,19 +25,20 @@
   "tap": {
     "check-coverage": true
   },
-  "files": [
-    "index.js"
-  ],
   "dependencies": {
-    "escape-string-regexp": "^2.0.0"
+    "escape-string-regexp": "^2.0.0",
+    "iserror": "0.0.2",
+    "moo": "^0.5.1",
+    "nearley": "^2.20.1"
   },
   "devDependencies": {
-    "bluebird": "^3.7.2",
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
+    "ava": "^3.15.0",
+    "common-tags": "^1.8.0",
     "coveralls": "^3.0.9",
-    "nested-error-stacks": "^2.1.0",
-    "pify": "^4.0.1",
-    "q": "^1.5.1",
-    "source-map-support": "^0.5.20",
-    "tap": "^15.0.9"
+    "npm-run-all": "^4.1.5",
+    "source-map-support": "^0.5.20"
   }
 }

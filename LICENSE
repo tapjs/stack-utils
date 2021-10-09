@@ -1,6 +1,7 @@
 The MIT License (MIT)
 
-Copyright (c) Isaac Z. Schlueter <i@izs.me>, James Talmage <james@talmage.io> (github.com/jamestalmage), and Contributors
+Code from the original `stack-utils` package is Copyright (c) Isaac Z. Schlueter <i@izs.me>, James Talmage <james@talmage.io> (github.com/jamestalmage), and Contributors
+Modifications Copyright (c) Conrad Buck <c@burningpotato.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
