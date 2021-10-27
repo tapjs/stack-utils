@@ -24,14 +24,18 @@ try {
 
 ## API
 
-The general API provides two methods:
+The general API provides these methods:
 
-`printError(error)` prints `` `${error.name}: ${error.message}\n${error.stack}` ``
-`printErrors(error)` recursively prints `` `${printError(error)}\nCaused by: ${printError(error.cause)}` ``
+- `captureFrames(omitFrames = 1)` returns the stack trace at the caller's location, omitting the last `omitFrames` frames. The default is to omit one frame, which would be the frame for `captureStack` itself.
+- `printFrames(error)` returns the frames of `error.stack` as a string, omitting the header text.
+- `printErrorHeader(error)` returns `` `${name}: ${message}` ``
+- `printErrorHeaders(error)` returns `${printErrorHeader(error)}\nCaused by: ${printErrorHeaders(error.cause)}`
+- `printError(error)` returns `` `${error.name}: ${error.message}\n${error.stack}` ``
+- `printErrors(error)` returns `` `${printError(error)}\nCaused by: ${printErrors(error.cause)}` ``
 
 ## Platform-specific API
 
-Currently the only supported platform is `v8`.
+Currently the only supported platform is [v8](https://v8.dev/).
 
 The platform-specific API allows parsing and reprinting of errors. **Parsing errors is a best-effort process, and you must never use the results of parsing an error to define business logic. The only supported usage of output from parseError is as input to printError.** These APIs exist to allow you to reformat errors which may contain unnecessary cruft, and their current usages are in test frameworks like `jest` and `ava`.
 
@@ -62,4 +66,4 @@ Full documentation of platform-specific APIs does not yet exist, but the tests a
 
 ## License
 
-MIT © [Conrad Buck](https://github.com/conartist6) [Isaac Z. Schlueter](https://github.com/isaacs), [James Talmage](https://github.com/jamestalmage)
+MIT © [Conrad Buck](https://github.com/conartist6), [Isaac Z. Schlueter](https://github.com/isaacs), [James Talmage](https://github.com/jamestalmage)

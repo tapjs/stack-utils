@@ -1,7 +1,7 @@
 {
   "name": "@conartist6/stack-utils",
   "version": "1.0.0",
-  "description": "Captures and cleans stack traces",
+  "description": "Utilites for printing and parsing errors and their stacks",
   "license": "MIT",
   "repository": "conartist6/stack-utils",
   "main": "lib/index.js",
