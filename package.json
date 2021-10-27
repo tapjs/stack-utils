@@ -24,7 +24,6 @@
     "check-coverage": true
   },
   "dependencies": {
-    "escape-string-regexp": "^2.0.0",
     "iserror": "0.0.2",
     "moo": "^0.5.1",
     "nearley": "^2.20.1"
