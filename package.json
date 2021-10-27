@@ -18,9 +18,7 @@
     "build:js": "babel -d lib src",
     "build:nearley": "cd src/v8/parse/internal/nearley && nearleyc error.ne -o error.js && nearleyc frame.ne -o frame.js && nearleyc frame-strict.ne -o frame-strict.js",
     "test": "ava",
-    "preversion": "npm test",
-    "postversion": "npm publish",
-    "prepublishOnly": "git push origin --follow-tags"
+    "verify": "run-s build:js test"
   },
   "tap": {
     "check-coverage": true
