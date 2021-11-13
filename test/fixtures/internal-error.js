@@ -1,12 +1,8 @@
 'use strict';
 const NestedError = require('nested-error-stacks');
-const util = require('util');
 
-function InternalError(message, nested) {
-	NestedError.call(this, message, nested);
-}
+class InternalError extends NestedError {}
 
-util.inherits(InternalError, NestedError);
 InternalError.prototype.name = 'InternalError';
 
 module.exports = function (cb, err) {
