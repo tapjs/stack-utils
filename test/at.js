@@ -1,8 +1,11 @@
 'use strict';
 // some capture edge cases not already covered by other tests
 
-const StackUtils = require('../');
-const t = require('tap');
+import StackUtils from '../index.js';
+import t from 'tap';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
 
 const stack = new StackUtils();
 

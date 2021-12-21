@@ -1,6 +1,6 @@
 'use strict';
 
-class CaptureFixture {
+export default class CaptureFixture {
   constructor (stack) {
     this.stack = stack;
   }
@@ -46,5 +46,3 @@ class CaptureFixture {
 CaptureFixture.prototype.call = function (method, ...args) {
   return this.stack[method](...args);
 };
-
-module.exports = CaptureFixture;

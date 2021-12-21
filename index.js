@@ -1,13 +1,12 @@
-'use strict';
-
-const escapeStringRegexp = require('escape-string-regexp');
+import escapeStringRegexp from 'escape-string-regexp';
+import { builtinModules } from 'module';
 
 const cwd = typeof process === 'object' && process && typeof process.cwd === 'function'
   ? process.cwd()
   : '.'
 
 const natives = [].concat(
-  require('module').builtinModules,
+  builtinModules,
   'bootstrap_node',
   'node',
 ).map(n => new RegExp(`(?:\\((?:node:)?${n}(?:\\.js)?:\\d+:\\d+\\)$|^\\s*at (?:node:)?${n}(?:\\.js)?:\\d+:\\d+$)`));
@@ -18,7 +17,7 @@ natives.push(
   /\/\.node-spawn-wrap-\w+-\w+\/node:\d+:\d+\)?$/
 );
 
-class StackUtils {
+export default class StackUtils {
   constructor (opts) {
     opts = {
       ignoredPackages: [],
@@ -334,5 +333,3 @@ const re = new RegExp(
 );
 
 const methodRe = /^(.*?) \[as (.*?)\]$/;
-
-module.exports = StackUtils;

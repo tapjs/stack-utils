@@ -1,12 +1,12 @@
 'use strict';
 
-const t = require('tap');
-const StackUtils = require('../');
-const longStackTraces = require('./fixtures/long-stack-traces');
-const pify = require('pify');
+import t from 'tap';
+import StackUtils from '../index.js';
+import * as longStackTraces from './fixtures/long-stack-traces.js';
+import pify from 'pify';
 const nestedErrors = pify(require('./fixtures/nested-errors'), require('bluebird'));
 
-const utils = require('./_utils');
+import utils from './_utils.js';
 
 function internals() {
   return StackUtils.nodeInternals().concat([
