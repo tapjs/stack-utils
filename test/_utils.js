@@ -1,14 +1,13 @@
 'use strict';
 
-const path = require('path');
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports.join = join;
-module.exports.fixtureDir = path.join(__dirname, 'fixtures');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-function join(...args) {
+export const fixtureDir = path.join(__dirname, 'fixtures');
+
+export function join(...args) {
   return [].concat(...args, '').join('\n');
-}
-
-if (module === require.main) {
-  require('tap').pass('this is fine');
 }

@@ -1,16 +1,20 @@
 'use strict';
 
-const Q = require('q');
+import Q from 'q';
 Q.longStackSupport = true;
 global.InternalPromise = Q;
-module.exports.q = require('./produce-long-stack-traces');
+export * from './produce-long-stack-traces.js';
+
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const longStackTracePath = require.resolve('./produce-long-stack-traces');
 const internalThen = require.resolve('./internal-then');
 delete require.cache[longStackTracePath];
 delete require.cache[internalThen];
 
-const bluebird = require('bluebird');
+import bluebird from 'bluebird';
 bluebird.config({longStackTraces: true});
 global.InternalPromise = bluebird;
-module.exports.bluebird = require('./produce-long-stack-traces');
+export * as bluebird from './produce-long-stack-traces';

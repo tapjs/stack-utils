@@ -1,15 +1,19 @@
 'use strict';
 
-const path = require('path');
-const t = require('tap');
-const StackUtils = require('../');
-const CaptureFixture = require('./fixtures/capture-fixture');
-const utils = require('./_utils');
+import path from 'path';
+import t from 'tap';
+import StackUtils from '../index.js';
+import CaptureFixture from './fixtures/capture-fixture.js';
+import * as utils from './_utils.js';
+import { fileURLToPath } from 'url';
 
 const LinuxStack1 = utils.join(linuxStack1(), internalStack());
 const WindowsStack1 = utils.join(windowsStack1(), internalStack());
 
 const version = process.version.slice(1).split('.').map(Number);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 t.test('must be called with new', t => {
   t.equal(typeof StackUtils, 'function');

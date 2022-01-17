@@ -1,9 +1,9 @@
 'use strict';
 
-const t = require('tap');
-const StackUtils = require('../');
+import t from 'tap';
+import StackUtils from '../index.js';
 
-const utils = require('./_utils');
+import * as utils from './_utils.js';
 
 const stackUtils = new StackUtils({ cwd: '/home/user' });
 

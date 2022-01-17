@@ -1,8 +1,8 @@
 'use strict';
 
-const t = require('tap');
+import t from 'tap';
 
-const StackUtils = require('../');
+import StackUtils from '../index.js';
 
 function helper(fromModule, ignoredPackages) {
   const stackUtil = new StackUtils({ignoredPackages});

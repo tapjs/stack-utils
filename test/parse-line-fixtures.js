@@ -1,10 +1,13 @@
 'use strict';
 
-const t = require('tap');
-const cases = require('./fixtures/parse-fixture.json');
-const lines = Object.keys(cases);
-const StackUtils = require('../');
+import t from 'tap';
+import fs from 'fs';
+import StackUtils from '../index.js';
+
 const stack = new StackUtils();
+
+const cases = JSON.parse(fs.readFileSync('./test/fixtures/parse-fixture.json'));
+const lines = Object.keys(cases);
 
 t.plan(lines.length * 2);
 lines.forEach(line => {
