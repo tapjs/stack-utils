@@ -161,7 +161,7 @@ class StackUtils {
     setFile(res, site.getFileName(), this._cwd);
 
     if (site.isConstructor()) {
-      res.constructor = true;
+      Object.defineProperty(res, 'constructor', { value: true });
     }
 
     if (site.isEval()) {
@@ -260,7 +260,7 @@ class StackUtils {
     setFile(res, file, this._cwd);
 
     if (ctor) {
-      res.constructor = true;
+      Object.defineProperty(res, 'constructor', { value: true });
     }
 
     if (evalOrigin) {
