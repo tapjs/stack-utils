@@ -79,7 +79,9 @@ class StackUtils {
         }
       }
 
-      st = st.replace(`${this._cwd}/`, '');
+      if (!/file:/.test(st)) {
+        st = st.replace(`${this._cwd}/`, '');
+      }
 
       if (st) {
         if (isAtLine) {
