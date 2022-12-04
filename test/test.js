@@ -81,6 +81,7 @@ t.test('clean: eliminates internals', t => {
     'foo (project/foo.js:3:8)',
     'bar (project/foo.js:7:2)',
     'bar (project/bar.js:4:2)',
+    'url (file:///user/dev/project/bar.mjs:8:9)',
     'Object.<anonymous> (project/bar.js:7:1)'
   ]);
   t.equal(stack.clean(LinuxStack1), expected);
