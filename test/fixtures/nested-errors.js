@@ -1,8 +1,8 @@
 'use strict';
 
 const NestedError = require('nested-error-stacks');
-const util = require('util');
 const internal = require('./internal-error');
+
 
 function foo(cb) {
 	bar(function nested(err) {
@@ -16,19 +16,19 @@ function bar(cb) {
 	});
 }
 
-function FooError(message, nested) {
-	NestedError.call(this, message, nested);
-}
-
-util.inherits(FooError, NestedError);
+class FooError extends NestedError {}
 FooError.prototype.name = 'FooError';
 
-function BarError(message, nested) {
-	NestedError.call(this, message, nested);
-}
 
-util.inherits(BarError, NestedError);
+
+
+
+class BarError extends NestedError {}
 BarError.prototype.name = 'BarError';
+
+
+
+
 
 module.exports.top = function(cb) {
 	internal(function (err) {
