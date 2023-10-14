@@ -25,7 +25,7 @@
     "index.js"
   ],
   "dependencies": {
-    "escape-string-regexp": "^2.0.0"
+    "escape-string-regexp": "^4.0.0"
   },
   "devDependencies": {
     "bluebird": "^3.7.2",
