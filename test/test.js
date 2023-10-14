@@ -40,6 +40,7 @@ t.test('clean: truncates cwd', t => {
     'foo (foo.js:3:8)',
     'bar (foo.js:7:2)',
     'bar (bar.js:4:2)',
+    'url (file:///user/dev/project/bar.mjs:8:9)',
     'Object.<anonymous> (bar.js:7:1)',
     'ontimeout (timers.js:365:14)',
     'tryOnTimeout (timers.js:237:5)',
@@ -80,6 +81,7 @@ t.test('clean: eliminates internals', t => {
     'foo (project/foo.js:3:8)',
     'bar (project/foo.js:7:2)',
     'bar (project/bar.js:4:2)',
+    'url (file:///user/dev/project/bar.mjs:8:9)',
     'Object.<anonymous> (project/bar.js:7:1)'
   ]);
   t.equal(stack.clean(LinuxStack1), expected);
@@ -392,6 +394,7 @@ function linuxStack1() {
     '    at foo (/user/dev/project/foo.js:3:8)',
     '    at bar (/user/dev/project/foo.js:7:2)',
     '    at bar (/user/dev/project/bar.js:4:2)',
+    '    at url (file:///user/dev/project/bar.mjs:8:9)',
     '    at Object.<anonymous> (/user/dev/project/bar.js:7:1)'
   ];
 }
@@ -402,6 +405,7 @@ function windowsStack1() {
     '    at foo (Z:\\user\\dev\\project\\foo.js:3:8)',
     '    at bar (Z:\\user\\dev\\project\\foo.js:7:2)',
     '    at bar (Z:\\user\\dev\\project\\bar.js:4:2)',
+    '    at url (file:///user/dev/project/bar.mjs:8:9)',
     '    at Object.<anonymous> (Z:\\user\\dev\\project\\bar.js:7:1)'
   ];
 }
