@@ -250,6 +250,9 @@ class StackUtils {
           }
         }
       }
+    } else if (!closeParen && fname) {
+      file = `${fname} (${file}`;
+      fname = undefined;
     }
 
     if (fname) {
@@ -317,6 +320,8 @@ const re = new RegExp(
   '^' +
     // Sometimes we strip out the '    at' because it's noisy
   '(?:\\s*at )?' +
+    // 'async ' prefix on async frames
+  '(?:async )?' +
     // $1 = ctor if 'new'
   '(?:(new) )?' +
     // $2 = function name (can be literally anything)

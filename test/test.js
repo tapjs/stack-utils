@@ -386,6 +386,42 @@ t.test('parseLine: handles parens', t => {
   t.end();
 });
 
+t.test('parseLine: handles anonymous frames with parens in file path', t => {
+  const stackUtils = new StackUtils();
+  t.same(stackUtils.parseLine('    at /home/me/My App (beta)/index.js:4:11'), {
+    line: 4,
+    column: 11,
+    file: '/home/me/My App (beta)/index.js'
+  });
+  t.same(stackUtils.parseLine('    at C:\\Program Files (x86)\\app\\index.js:4:11'), {
+    line: 4,
+    column: 11,
+    file: 'C:/Program Files (x86)/app/index.js'
+  });
+  t.end();
+});
+
+t.test('parseLine: handles async frames', t => {
+  const stackUtils = new StackUtils();
+  t.same(stackUtils.parseLine('    at async /home/me/app/index.js:4:11'), {
+    line: 4,
+    column: 11,
+    file: '/home/me/app/index.js'
+  });
+  t.same(stackUtils.parseLine('async /home/me/app/index.js:4:11'), {
+    line: 4,
+    column: 11,
+    file: '/home/me/app/index.js'
+  });
+  t.same(stackUtils.parseLine('    at async foo (/home/me/app/index.js:4:11)'), {
+    line: 4,
+    column: 11,
+    file: '/home/me/app/index.js',
+    function: 'foo'
+  });
+  t.end();
+});
+
 function linuxStack1() {
   return [
     'Error: foo',
