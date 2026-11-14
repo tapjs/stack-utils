@@ -71,6 +71,13 @@ t.test('clean: truncates cwd', t => {
   const expectIndented = utils.join(expectedArray.map(a => '    ' + a));
   t.equal(stack.clean(WindowsStack1, 4), expectIndented, 'indentation');
 
+  const multilineWindowsStack = `TypeError: foo\nbar\nbaz\n${WindowsStack1.split('\n').slice(1).join('\n')}`;
+  t.equal(stack.clean(multilineWindowsStack), expected, 'slices off all lines of leading multiline message');
+
+  const linuxStackUtils = new StackUtils({cwd: '/user/dev/project', internals: []});
+  const multilineLinuxStack = `TypeError: foo\nbar\nbaz\n${LinuxStack1.split('\n').slice(1).join('\n')}`;
+  t.equal(linuxStackUtils.clean(multilineLinuxStack), expected, 'slices off all lines of leading multiline message on linux');
+
   t.end();
 });
 
