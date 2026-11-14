@@ -71,6 +71,12 @@ t.test('clean: truncates cwd', t => {
   const expectIndented = utils.join(expectedArray.map(a => '    ' + a));
   t.equal(stack.clean(WindowsStack1, 4), expectIndented, 'indentation');
 
+  const linuxFileUrlStack = LinuxStack1.replace(/\/user\/dev\/project\//g, 'file:///user/dev/project/');
+  t.equal(new StackUtils({cwd: '/user/dev/project', internals: []}).clean(linuxFileUrlStack), expected, 'strips file:// on linux');
+
+  const winFileUrlStack = WindowsStack1.replace(/Z:\\user\\dev\\project\\/g, 'file:///Z:/user/dev/project/');
+  t.equal(stack.clean(winFileUrlStack), expected, 'strips file:// on windows');
+
   t.end();
 });
 
@@ -382,6 +388,27 @@ t.test('parseLine: handles parens', t => {
     column: 11,
     file: '/USER/Db (Person)/x/y.js',
     function: 'X.<anonymous>'
+  });
+  t.end();
+});
+
+t.test('parseLine: handles file:// URLs', t => {
+  const line = '    at run (file:///user/dev/project/test.mjs:6:9)';
+  const stackUtils = new StackUtils({cwd: '/user/dev/project'});
+  t.same(stackUtils.parseLine(line), {
+    line: 6,
+    column: 9,
+    file: 'test.mjs',
+    function: 'run'
+  });
+
+  const winLine = '    at run (file:///Z:/user/dev/project/test.mjs:6:9)';
+  const winStackUtils = new StackUtils({cwd: 'Z:\\user\\dev\\project'});
+  t.same(winStackUtils.parseLine(winLine), {
+    line: 6,
+    column: 9,
+    file: 'test.mjs',
+    function: 'run'
   });
   t.end();
 });
