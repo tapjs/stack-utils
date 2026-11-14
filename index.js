@@ -34,6 +34,7 @@ class StackUtils {
     }
 
     this._cwd = opts.cwd.replace(/\\/g, '/');
+    this._cwdRegexp = new RegExp(`(?:file:///?)${escapeStringRegexp(this._cwd)}/|${escapeStringRegexp(this._cwd)}/`, 'g');
     this._internals = [].concat(
       opts.internals,
       ignoredPackagesRegExp(opts.ignoredPackages)
@@ -79,7 +80,7 @@ class StackUtils {
         }
       }
 
-      st = st.replace(`${this._cwd}/`, '');
+      st = st.replace(this._cwdRegexp, '');
 
       if (st) {
         if (isAtLine) {
@@ -295,7 +296,11 @@ class StackUtils {
 function setFile (result, filename, cwd) {
   if (filename) {
     filename = filename.replace(/\\/g, '/');
-    if (filename.startsWith(`${cwd}/`)) {
+    if (filename.startsWith(`file:///${cwd}/`)) {
+      filename = filename.slice(cwd.length + 9);
+    } else if (filename.startsWith(`file://${cwd}/`)) {
+      filename = filename.slice(cwd.length + 8);
+    } else if (filename.startsWith(`${cwd}/`)) {
       filename = filename.slice(cwd.length + 1);
     }
 
