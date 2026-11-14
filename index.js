@@ -53,8 +53,9 @@ class StackUtils {
       stack = stack.split('\n');
     }
 
-    if (!(/^\s*at /.test(stack[0])) && (/^\s*at /.test(stack[1]))) {
-      stack = stack.slice(1);
+    const firstAt = stack.findIndex(line => /^\s*at /.test(line));
+    if (firstAt > 0) {
+      stack = stack.slice(firstAt);
     }
 
     let outdent = false;
